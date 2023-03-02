@@ -1,11 +1,19 @@
 package ProgramLearn;
 
+import java.util.Arrays;
+
 public class LargestPerimeter {
 
     public int largestPerimeter(int[] nums) {
-        int max = 0;
-        for (int i = 0; i < nums.length; i++) {
-
+        Arrays.sort(nums);
+        for (int i = nums.length - 1; i >= 2; i--) {
+            int a = nums[i];
+            int b = nums[i - 1];
+            int c = nums[i - 2];
+            if (b + c > a){
+                return a + b + c;
+            }
         }
+        return 0;
     }
 }
