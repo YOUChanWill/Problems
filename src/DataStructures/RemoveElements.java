@@ -26,6 +26,23 @@ public class RemoveElements {
     }
 
 
+    public ListNode removeElements01(ListNode head, int val) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode now = head, pre = dummy;
+        while (now != null) {
+            if (now.val != val) {
+                now = now.next;
+                pre = pre.next;
+            } else {
+                pre.next = now.next;
+                now.next = null;
+                now = pre.next;
+            }
+        }
+        return dummy.next;
+    }
+
 public class ListNode {
 int val;
  ListNode next;
