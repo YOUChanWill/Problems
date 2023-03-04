@@ -3,8 +3,7 @@ package base;
 public class Search {
     public int search(int[] nums, int target) {
         int left = 0, right = nums.length - 1;
-        int mid = (left + right) / 2;
-
+        int mid = (left + right) / 2; // 获取中间索引
         while (left<=right) {
             if (target > nums[mid]) {
                 left = mid + 1;
