@@ -1,4 +1,4 @@
-package Day;
+package Algorithms;
 
 public class numberOfSubarrays {
     public static void main(String[] args) {

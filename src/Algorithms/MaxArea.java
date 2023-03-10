@@ -1,4 +1,4 @@
-package Day;
+package Algorithms;
 
 public class MaxArea {
     public static void main(String[] args) {
