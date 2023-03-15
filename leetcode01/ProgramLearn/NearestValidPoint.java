@@ -26,5 +26,4 @@ public class NearestValidPoint {
         }
         return bestid;
     }
-
 }
