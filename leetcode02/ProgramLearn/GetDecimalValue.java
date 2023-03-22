@@ -11,6 +11,16 @@ public class GetDecimalValue {
         }
         return ans;
     }
+
+    public int getDecimalValue01(ListNode head) {
+        int res = 0;
+        while (head != null) {
+            res <<= 1;
+            res |= head.val;
+            head = head.next;
+        }
+        return res;
+    }
 }
 
 class ListNode {
