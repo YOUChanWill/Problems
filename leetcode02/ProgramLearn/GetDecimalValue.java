@@ -15,8 +15,8 @@ public class GetDecimalValue {
     public int getDecimalValue01(ListNode head) {
         int res = 0;
         while (head != null) {
-            res <<= 1;
-            res |= head.val;
+            res <<= 1; // 向左移位后，最低位一定为0，所有可以用 或运算 和 最低位 做 加法，因为不存在进位的情况下，或运算可以用作二进制的加法
+            res |= head.val; // res = res | head.val
             head = head.next;
         }
         return res;
