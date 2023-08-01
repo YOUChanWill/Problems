@@ -181,15 +181,26 @@ public class Solution {
 
 
     /**一个 句子 指的是一个序列的单词用单个空格连接起来，且开头和结尾没有任何空格。每个单词都只包含小写或大写英文字母。
-
      我们可以给一个句子添加 从 1 开始的单词位置索引 ，并且将句子中所有单词 打乱顺序 。
-
      比方说，句子 "This is a sentence" 可以被打乱顺序得到 "sentence4 a3 is2 This1" 或者 "is2 sentence4 This1 a3" 。
      给你一个 打乱顺序 的句子 s ，它包含的单词不超过 9 个，请你重新构造并得到原本顺序的句子。**/
     public String sortSentence(String s) {
 
-    }
+        String[] str = s.split(" ");    //句子分解成单词
+        String[] str1 = new String[10]; //存储排序之后的答案
 
+        //将每个单词的最后一个数字当作下标存储到str1中，因为最后的答案不包含数字，所以要把数字去除
+        for(int i = 0; i < str.length; i++) {
+            str1[str[i].charAt(str[i].length() - 1) - '0'] = str[i].substring(0, str[i].length() - 1);
+        }
+        String ans = "";    //最终连接成句子的答案
+        for(int i = 1; i <= str.length; i++) {  //把单词连接成句子
+            ans += str1[i];
+            if(i != str.length)
+                ans += " ";
+        }
+        return ans;
+    }
 
 
     /**给你一个整数数组 nums，请你选择数组的两个不同下标 i 和 j，使 (nums[i]-1)*(nums[j]-1) 取得最大值。
@@ -234,18 +245,20 @@ public class Solution {
         return true;
     }
 
-
-
     /**给你一个正整数 num ，请你将它分割成两个非负整数 num1 和 num2 ，满足：
      num1 和 num2 直接连起来，得到 num 各数位的一个排列。
      换句话说，num1 和 num2 中所有数字出现的次数之和等于 num 中所有数字出现的次数。
      num1 和 num2 可以包含前导 0 。
      请你返回 num1 和 num2 可以得到的和的 最小 值。**/
     public int splitNum(int num) {
-
+        char[] s = Integer.toString(num).toCharArray();
+        Arrays.sort(s);
+        int[] min = new int[2];
+        for (int i = 0; i < s.length; i++) {
+            min[i % 2] = min[i % 2] * 10 + s[i] - '0'; // 使用奇偶下标分组
+        }
+        return min[0] + min[1];
     }
-
-
 
 
     /**给你一个非负整数数组 nums 。在一步操作中，你必须：
@@ -253,19 +266,15 @@ public class Solution {
      nums 中的每个正整数都减去 x。
      返回使 nums 中所有元素都等于 0 需要的 最少 操作数。**/
     public int minimumOperations(int[] nums) {
-        int count = 0,sum = 0;
-        Arrays.sort(nums);
-        int target = nums[nums.length - 1];
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-            if (sum <= target && target > 0){
-                count++;
-            }
+        //使用哈希集合存储数组中的所有非零元素，则哈希集合的大小等于数组中的不同非零元素的个数，即为最少操作数。
+        //如果数组中的一个元素已经是0则不需要对该元素执行操作，因此只需要考虑数组中的不同非零元素的个数。
+        HashSet<Integer> set = new HashSet<>();
+        for (int a :
+                nums) {
+            if (a > 0) set.add(a);
         }
-        return count;
+        return set.size();
     }
-
-
 
     /**给定两个数组 nums1 和 nums2 ，返回 它们的交集 。输出结果中的每个元素一定是 唯一 的。我们可以 不考虑输出结果的顺序 。**/
     public int[] intersection(int[] nums1, int[] nums2) {
@@ -324,10 +333,69 @@ public class Solution {
         return Arrays.copyOfRange(intersection, 0, index);
     }
 
+    /**给你个整数数组 arr，其中每个元素都 不相同。
+     请你找到所有具有最小绝对差的元素对，并且按升序的顺序返回。**/
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        int n = arr.length;
+        Arrays.sort(arr);
+
+        int best = Integer.MAX_VALUE;
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        for (int i = 0; i < n - 1; ++i) {
+            int delta = arr[i + 1] - arr[i];
+            if (delta < best) {
+                best = delta;
+                ans.clear();
+                List<Integer> pair = new ArrayList<Integer>();
+                pair.add(arr[i]);
+                pair.add(arr[i + 1]);
+                ans.add(pair);
+            } else if (delta == best) {
+                List<Integer> pair = new ArrayList<Integer>();
+                pair.add(arr[i]);
+                pair.add(arr[i + 1]);
+                ans.add(pair);
+            }
+        }
+        return ans;
+    }
+
+    /**给你一个 不包含 任何零的整数数组 nums ，找出自身与对应的负数都在数组中存在的最大正整数 k 。
+     返回正整数 k ，如果不存在这样的整数，返回 -1 。**/
+    public int findMaxK(int[] nums) {
+        int ans = -1;
+        HashSet s = new HashSet<Integer>();
+        for (int x : nums) {
+            if (s.contains(-x))
+                ans = Math.max(ans, Math.abs(x));
+            s.add(x);
+        }
+        return ans;
+    }
+
+
+    /**给你一个整数数组 nums ，另给你一个整数 original ，这是需要在 nums 中搜索的第一个数字。
+     接下来，你需要按下述步骤操作：
+     如果在 nums 中找到 original ，将 original 乘以 2 ，得到新 original（即，令 original = 2 * original）。
+     否则，停止这一过程。
+     只要能在数组中找到新 original ，就对新 original 继续 重复 这一过程。
+     返回 original 的 最终 值。**/
+    public int findFinalValue(int[] nums, int original) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int a :
+                nums) {
+            set.add(a);
+        }
+        int x = original;
+        while (set.contains(x) == true) x <<= 1;
+        return x;
+    }
 
 
 
+    public List<Integer> minSubsequence(int[] nums) {
 
+    }
 
 
 
