@@ -415,10 +415,21 @@ public class Solution {
 
     /**给你一个整数数组 nums ，请你将数组按照每个值的频率 升序 排序。如果有多个值的频率相同，请你按照数值本身将它们 降序 排序。 **/
     public int[] frequencySort(int[] nums) {
+        int[] cnts = new int[201];
+        for (int n :
+                nums) {
+            cnts[n + 100]++;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = 10000 * cnts[nums[i] + 100] - nums[i] +100;
+        }
+        Arrays.sort(nums);
 
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = 100 - nums[i] % 10000;
+        }
+        return nums;
     }
-
-
 
 
     /**请你将一些箱子装在 一辆卡车 上。给你一个二维数组 boxTypes ，其中 boxTypes[i] = [numberOfBoxesi, numberOfUnitsPerBoxi] ：
@@ -437,6 +448,10 @@ public class Solution {
      请你返回一个二维数组 ret，其中 ret[i] = [valuei, weighti]， weighti 是所有价值为 valuei 物品的 重量之和 。
      注意：ret 应该按价值 升序 排序后返回。**/
     public List<List<Integer>> mergeSimilarItems(int[][] items1, int[][] items2) {
+
+    }
+
+    public static void main(String[] args) {
 
     }
 
