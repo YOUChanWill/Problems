@@ -1,9 +1,6 @@
 package day1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class Solution {
 
@@ -438,7 +435,14 @@ public class Solution {
      整数 truckSize 表示卡车上可以装载 箱子 的 最大数量 。只要箱子数量不超过 truckSize ，你就可以选择任意箱子装到卡车上。
      返回卡车可以装载 单元 的 最大 总数。**/
     public int maximumUnits(int[][] boxTypes, int truckSize) {
-
+        Arrays.sort(boxTypes,(a,b)->b[1]-a[1]);
+        int n = boxTypes.length, ans = 0;
+        for (int i = 0, cnt = 0; i < n && cnt < truckSize; i++) {
+            int a = boxTypes[i][0], b = boxTypes[i][1], c = Math.min(a,truckSize - cnt);
+            cnt += c;
+            ans += c * b;
+        }
+        return ans;
     }
 
 
@@ -448,7 +452,27 @@ public class Solution {
      请你返回一个二维数组 ret，其中 ret[i] = [valuei, weighti]， weighti 是所有价值为 valuei 物品的 重量之和 。
      注意：ret 应该按价值 升序 排序后返回。**/
     public List<List<Integer>> mergeSimilarItems(int[][] items1, int[][] items2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int[] v :
+                items1) {
+            map.put(v[0], map.getOrDefault(v[0], 0) + v[1]);
+        }
 
+        for (int[] v :
+                items2) {
+            map.put(v[0], map.getOrDefault(v[0], 0) + v[1]);
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry :
+                map.entrySet()) {
+            int k = entry.getKey(), v = entry.getValue();
+            ArrayList<Integer> pair = new ArrayList<>();
+            pair.add(k);
+            pair.add(v);
+            res.add(pair);
+        }
+        Collections.sort(res, Comparator.comparingInt(a -> a.get(0)));
+        return res;
     }
 
     public static void main(String[] args) {
