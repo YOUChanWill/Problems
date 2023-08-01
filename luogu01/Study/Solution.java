@@ -6,19 +6,6 @@ import java.util.Scanner;
 
 public class Solution {
 
-//    public int treelist(int[] m){
-//        List<Integer> arrayList = new ArrayList<>();
-//        int sum = 0;
-//        if (m[0] == 1){
-//            arrayList.set(m[1],m[1] + m[2]);
-//        }
-//        if (m[0] == 2){
-//            for (int j = m[1]; j < m[2]; j++) {
-//                sum += m[j]
-//            }
-//        }
-//    }
-
     public static void main(String[] args) {
 
         List<Integer> arrayList = new ArrayList<>();

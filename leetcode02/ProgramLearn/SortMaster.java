@@ -11,7 +11,7 @@ public class SortMaster {
         int len = scanner.nextInt();
         int[] sortlist = new int[len];
 
-        Map<Integer, Integer> map = new Map<>();
+//        Map<Integer, Integer> map = new Map<>();
 
         for (int j = 0; j < len; j++) {
             int num = scanner.nextInt();
