@@ -378,9 +378,78 @@ public class Solution {
     }
 
 
-    public int[][] allCellsDistOrder(int rows, int cols, int rCenter, int cCenter) {
+    /**给定四个整数 rows ,   cols ,  rCenter 和 cCenter 。有一个 rows x cols 的矩阵，你在单元格上的坐标是 (rCenter, cCenter) 。
 
+     返回矩阵中的所有单元格的坐标，并按与 (rCenter, cCenter) 的 距离 从最小到最大的顺序排。你可以按 任何 满足此条件的顺序返回答案。
+
+     单元格(r1, c1) 和 (r2, c2) 之间的距离为|r1 - r2| + |c1 - c2|。**/
+    int[] dr = {1, 1, -1, -1};
+    int[] dc = {1, -1, -1, 1};
+
+    public int[][] allCellsDistOrder(int rows, int cols, int rCenter, int cCenter) {
+        int maxDist = Math.max(rCenter, rows - 1 - rCenter) + Math.max(cCenter, cols - 1 - cCenter);
+        int[][] ret = new int[rows * cols][];
+        int row = rCenter, col = cCenter;
+        int index = 0;
+        ret[index++] = new int[]{row, col};
+        for (int dist = 1; dist <= maxDist; dist++) {
+            row--;
+            for (int i = 0; i < 4; i++) {
+                while ((i % 2 == 0 && row != rCenter) || (i % 2 != 0 && col != cCenter)) {
+                    if (row >= 0 && row < rows && col >= 0 && col < cols) {
+                        ret[index++] = new int[]{row, col};
+                    }
+                    row += dr[i];
+                    col += dc[i];
+                }
+            }
+        }
+        return ret;
     }
+
+
+    public int[][] allCellsDistOrder01(int rows, int cols, int rCenter, int cCenter) {
+        int maxDist = Math.max(rCenter, rows - 1 - rCenter) + Math.max(cCenter, cols - 1 - cCenter);
+        List<List<int[]>> bucket = new ArrayList<List<int[]>>();
+        for (int i = 0; i <= maxDist; i++) {
+            bucket.add(new ArrayList<int[]>());
+        }
+
+        // 首先存储矩阵内所有的点，然后将其按照哈曼顿距离直接排序
+        // 在枚举所有点时，可以直接按照哈曼顿距离分桶。这样就可以实现线性的桶排序。
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int d = dist(i, j, rCenter, cCenter);
+                bucket.get(d).add(new int[]{i, j});
+            }
+        }
+        int[][] ret = new int[rows * cols][];
+        int index = 0;
+        for (int i = 0; i <= maxDist; i++) {
+            for (int[] it : bucket.get(i)) {
+                ret[index++] = it;
+            }
+        }
+        return ret;
+    }
+
+    public int dist(int r1, int c1, int r2, int c2) {
+        return Math.abs(r1 - r2) + Math.abs(c1 - c2);
+    }
+
+
+    /**输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。**/
+    public int[] getLeastNumbers(int[] arr, int k) {
+        Arrays.sort(arr);
+        int[] ans = new int[k];
+        for (int i = 0; i < k; i++) {
+            ans[i] = arr[i];
+        }
+        return ans;
+    }
+
+
+
 
 
     public static void main(String[] args) {
