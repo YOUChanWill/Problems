@@ -416,28 +416,114 @@ public class Solution {
     /**给定一个整数数组 nums 和一个整数 k ，请返回其中出现频率前 k 高的元素。可以按 任意顺序 返回答案。**/
     public int[] topKFrequent(int[] nums, int k) {
 
+        Map<Integer, Integer> occurrences = new HashMap<Integer, Integer>();
+        for (int num : nums) {
+            occurrences.put(num, occurrences.getOrDefault(num, 0) + 1);
+        }
+
+        // int[] 的第一个元素代表数组的值，第二个元素代表了该值出现的次数
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] m, int[] n) {
+                return m[1] - n[1];
+            }
+        });
+        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+            int num = entry.getKey(), count = entry.getValue();
+            if (queue.size() == k) {
+                if (queue.peek()[1] < count) {
+                    queue.poll();
+                    queue.offer(new int[]{num, count});
+                }
+            } else {
+                queue.offer(new int[]{num, count});
+            }
+        }
+        int[] ret = new int[k];
+        for (int i = 0; i < k; ++i) {
+            ret[i] = queue.poll()[0];
+        }
+        return ret;
     }
 
 
+    public int[] topKFrequent01(int[] nums, int k) {
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] count = new int[max - min + 1];
+        for (int num : nums) {
+            count[num - min]++;
+        }
+        List<Integer>[] list = new List[nums.length + 1];
+        for (int i = 0; i < count.length; i++) {
+            if (count[i] == 0) {
+                continue;
+            }
+            int idx = count[i];
+            if (list[idx] == null) {
+                list[idx] = new ArrayList<>();
+            }
+            list[idx].add(i + min);
+        }
+        int[] res = new int[k];
+        int idx = 0;
+        for (int i = list.length - 1; i >= 0; i--) {
+            if (list[i] == null) {
+                continue;
+            }
+
+            for (Integer num : list[i]) {
+                res[idx++] = num;
+                if (idx == k) {
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
 
 
     /**在一个整数数组中，“峰”是大于或等于相邻整数的元素，相应地，“谷”是小于或等于相邻整数的元素。
      例如，在数组{5, 8, 4, 2, 3, 4, 6}中，{8, 6}是峰， {5, 2}是谷。现在给定一个整数数组，将该数组按峰与谷的交替顺序排序。
      **/
     public void wiggleSort(int[] nums) {
-        int n = nums.length;
-        int[] ans = nums.clone();
-        Arrays.sort(nums);
-        for (int i = 0 ,j = n - 1; i != j ; i++,j--) {
-            ans[i] = nums[j];
+        for (int i = 1; i < nums.length; i++) {
+            if (i % 2 == 0) {
+                // 如果i为谷的位置，则判断当前位置是否大于前一个位置（前一个为峰），若大于，则交换，大于则不处理
+                if(nums[i] > nums[i-1]) exch(nums, i, i-1);
+            } else {
+                // 如果i为峰的位置，则判断当前位置是否小于前一个位置（前一个为谷），若小于，则交换，大于则不处理
+                if(nums[i] < nums[i-1]) exch(nums, i, i-1);
+            }
         }
+    }
+    // 使用位运算完成交换
+    void exch(int[] nums, int i, int j){
+        nums[i] ^= nums[j];
+        nums[j] ^= nums[i];
+        nums[i] ^= nums[j];
     }
 
 
     /**给定正整数 n ，我们按任何顺序（包括原始顺序）将数字重新排序，注意其前导数字不能为零。
      如果我们可以通过上述方式得到 2 的幂，返回 true；否则，返回 false。**/
     public boolean reorderedPowerOf2(int n) {
+        HashSet<String> set = new HashSet<>();
+        for (int i = 1; i <= 1e9; i<<=1) {
+            set.add(count(i));
+        }
+        return set.contains(count(n));
+    }
 
+    private String count(int n){
+        char[] cnt = new char[10];
+        while (n > 0){
+            ++cnt[n % 10];
+            n /= 10;
+        }
+        return new String(cnt);
     }
 
 
