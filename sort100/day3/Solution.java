@@ -298,8 +298,6 @@ public class Solution {
         return ans;
     }
 
-
-
     /**商店中新到 n 支雪糕，用长度为 n 的数组 costs 表示雪糕的定价，其中 costs[i] 表示第 i 支雪糕的现金价格。Tony 一共有 coins 现金可以用于消费，他想要买尽可能多的雪糕。
 
      注意：Tony 可以按任意顺序购买雪糕。
@@ -341,16 +339,111 @@ public class Solution {
         return count;
     }
 
+    /**有 3n 堆数目不一的硬币，你和你的朋友们打算按以下方式分硬币：
 
+     每一轮中，你将会选出 任意 3 堆硬币（不一定连续）。
+     Alice 将会取走硬币数量最多的那一堆。
+     你将会取走硬币数量第二多的那一堆。
+     Bob 将会取走最后一堆。
+     重复这个过程，直到没有更多硬币。
+     给你一个整数数组 piles ，其中 piles[i] 是第 i 堆中硬币的数目。
 
-
-
-
-    public static void main(String[] args) {
-        int[] list = new int[]{0,3,4,13,9};
-        isStraight(list);
+     返回你可以获得的最大硬币数目。**/
+    public int maxCoins(int[] piles) {
+        Arrays.sort(piles);
+        int lengh = piles.length;
+        int rounds = lengh / 3, coins = 0, index = lengh - 2;
+        for (int i = 0; i < rounds; i++) {
+            coins += piles[index];
+            index -= 2;
+        }
+        return coins;
     }
 
 
+    /**给你一个正整数数组 price ，其中 price[i] 表示第 i 类糖果的价格，另给你一个正整数 k 。
+
+     商店组合 k 类 不同 糖果打包成礼盒出售。礼盒的 甜蜜度 是礼盒中任意两种糖果 价格 绝对差的最小值。
+
+     返回礼盒的 最大 甜蜜度。**/
+    public int maximumTastiness(int[] price, int k) {
+        Arrays.sort(price);
+        int left = 0, right = price[price.length - 1] - price[0];
+        while (left < right){
+            int mid = (left + right + 1) / 2;
+            if (check(price,k,mid)) left = mid;
+            else right = mid - 1;
+        }
+        return left;
+    }
+
+
+    private boolean check(int[] price, int k, int tastiness){
+        int prev = Integer.MIN_VALUE / 2;
+        int cnt = 0;
+        for (int p : price) {
+            if (p - prev >= tastiness){
+                cnt++;
+                prev = p;
+            }
+        }
+        return cnt >= k;
+    }
+
+    private int[] price;
+    public int maximumTastiness01(int[] price, int k) {
+        this.price = price;
+        Arrays.sort(price);
+        int l = 0, r  = (price[price.length - 1] - price[0]) / (k - 1) + 1;
+        while (l <= r){//找第一个小于k
+            int mid = l+(r-l)/2;
+            if (f(mid) >=k) l = mid+1;
+            else r=mid-1;
+        }
+        return r;
+    }
+    //甜蜜度至少为t时，最多能选k种，随着t的增大，k减小
+    private int f(int t){
+        int res = 1,pre = price[0];
+        for (int p: price){
+            if (p >=pre+t) {res++;pre = p;}
+        }
+        return res;
+    }
+
+
+
+    /**给定一个整数数组 nums 和一个整数 k ，请返回其中出现频率前 k 高的元素。可以按 任意顺序 返回答案。**/
+    public int[] topKFrequent(int[] nums, int k) {
+
+    }
+
+
+
+
+    /**在一个整数数组中，“峰”是大于或等于相邻整数的元素，相应地，“谷”是小于或等于相邻整数的元素。
+     例如，在数组{5, 8, 4, 2, 3, 4, 6}中，{8, 6}是峰， {5, 2}是谷。现在给定一个整数数组，将该数组按峰与谷的交替顺序排序。
+     **/
+    public void wiggleSort(int[] nums) {
+        int n = nums.length;
+        int[] ans = nums.clone();
+        Arrays.sort(nums);
+        for (int i = 0 ,j = n - 1; i != j ; i++,j--) {
+            ans[i] = nums[j];
+        }
+    }
+
+
+    /**给定正整数 n ，我们按任何顺序（包括原始顺序）将数字重新排序，注意其前导数字不能为零。
+     如果我们可以通过上述方式得到 2 的幂，返回 true；否则，返回 false。**/
+    public boolean reorderedPowerOf2(int n) {
+
+    }
+
+
+    /**输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。**/
+    public String minNumber(int[] nums) {
+
+    }
 
 }
