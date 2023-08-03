@@ -1,6 +1,8 @@
 package normal;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class Solution {
 
@@ -38,6 +40,51 @@ public class Solution {
 
 
 
+    /**给一个 C++ 程序，删除程序中的注释。这个程序source是一个数组，其中source[i]表示第 i 行源码。 这表示每行源码由 '\n' 分隔。
+     在 C++ 中有两种注释风格，行内注释和块注释。
+
+     字符串// 表示行注释，表示//和其右侧的其余字符应该被忽略。
+     字符串 表示一个块注释，它表示直到下一个（非重叠）出现的之间的所有字符都应该被忽略。（阅读顺序为从左到右）非重叠是指，字符串并没有结束块注释，因为注释的结尾与开头相重叠。
+     第一个有效注释优先于其他注释。
+
+     如果字符串//出现在块注释中会被忽略。
+     同样，如果字符串/*出现在行或块注释中也会被忽略。
+     如果一行在删除注释之后变为空字符串，那么不要输出该行。即，答案列表中的每个字符串都是非空的。
+     **/
+    public List<String> removeComments(String[] source) {
+        List<String> ans = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        boolean blockComment = false;
+        for (String s : source) {
+            int m = s.length();
+            for (int i = 0; i < m; ++i) {
+                if (blockComment) {
+                    // 遇到"*/"，则将状态改为不在注释块内，继续遍历后面第三个字符。
+                    if (i + 1 < m && s.charAt(i) == '*' && s.charAt(i + 1) == '/') {
+                        blockComment = false;
+                        ++i;
+                    }
+                } else {
+                    // 遇到"/*"，则将状态改为在注释块内，继续遍历后面第三个字符。
+                    if (i + 1 < m && s.charAt(i) == '/' && s.charAt(i + 1) == '*') {
+                        blockComment = true;
+                        ++i;
+                        // 遇到"//"，则直接忽略该行后面的部分。
+                    } else if (i + 1 < m && s.charAt(i) == '/' && s.charAt(i + 1) == '/') {
+                        break;
+                        // 遇到其他字符，将该字符记录到 newLine 中。
+                    } else {
+                        sb.append(s.charAt(i));
+                    }
+                }
+            }
+            if (!blockComment && sb.length() > 0) {
+                ans.add(sb.toString());
+                sb.setLength(0);
+            }
+        }
+        return ans;
+    }
 
 
 
