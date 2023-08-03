@@ -123,7 +123,28 @@ public class Solution {
     /**给你一个正整数 num 。你可以交换 num 中 奇偶性 相同的任意两位数字（即，都是奇数或者偶数）。
      返回交换 任意 次之后 num 的 最大 可能值。**/
     public int largestInteger(int num) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(num);
 
+        char[] arr = sb.toString().toCharArray();
+
+        // 每次找到的数字若为偶数，则向后遍历，寻找更大的偶数，若存在，则交换位置，否则不做处理
+        // 每次找到的数字若为奇数，则向后遍历，寻找更大的奇数，若存在，则交换位置，否则不做处理
+        for (int i = 0; i < sb.length(); i++) {
+            char n = arr[i];
+            for (int j = i + 1; j < sb.length(); j++) {
+                if ((n - '0') % 2 == 1 && (arr[j] - '0') % 2 == 1 && arr[j] - '0' > n - '0') {
+                    arr[i] = arr[j];
+                    arr[j] = n;
+                    n = arr[i];
+                } else if ((n - '0') % 2 == 0 && (arr[j] - '0') % 2 == 0 && arr[j] - '0' > n - '0') {
+                    arr[i] = arr[j];
+                    arr[j] = n;
+                    n = arr[i];
+                }
+            }
+        }
+        return Integer.parseInt(String.copyValueOf(arr));
     }
 
 
@@ -207,6 +228,119 @@ public class Solution {
         }
         return deck;
     }
+
+
+    /**给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+     我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+     必须在不使用库内置的 sort 函数的情况下解决这个问题。**/
+    public void sortColors(int[] nums) {
+        int lengh = nums.length , n0 = 0, n1 = 0;
+        for (int i = 0; i < lengh; i++) {
+            int num = nums[i];
+            nums[i] = 2;
+            if (num < 2) nums[n1++] = 1;
+            if (num < 1) nums[n0++] = 0;
+        }
+    }
+
+    public void sortColors01(int[] nums) {
+        int len = nums.length;
+        if (len < 2) {
+            return;
+        }
+        int zero = 0;
+        int two = len;
+        int i = 0;
+        while (i < two) {
+            if (nums[i] == 0) {
+                swap(nums, i, zero);
+                zero++;
+                i++;
+            } else if (nums[i] == 1) {
+                i++;
+            } else {
+                two--;
+                swap(nums, i, two);
+            }
+        }
+    }
+
+    private void swap(int[] nums, int index1, int index2) {
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
+    }
+
+
+    /**给你一个长度为 n 的整数数组 score ，其中 score[i] 是第 i 位运动员在比赛中的得分。所有得分都 互不相同 。
+
+     运动员将根据得分 决定名次 ，其中名次第 1 的运动员得分最高，名次第 2 的运动员得分第 2 高，依此类推。运动员的名次决定了他们的获奖情况：
+
+     名次第 1 的运动员获金牌 "Gold Medal" 。
+     名次第 2 的运动员获银牌 "Silver Medal" 。
+     名次第 3 的运动员获铜牌 "Bronze Medal" 。
+     从名次第 4 到第 n 的运动员，只能获得他们的名次编号（即，名次第 x 的运动员获得编号 "x"）。
+     使用长度为 n 的数组 answer 返回获奖，其中 answer[i] 是第 i 位运动员的获奖情况。**/
+    public String[] findRelativeRanks(int[] score) {
+        int n = score.length;
+        String[] ans = new String[n];
+        int[] clone = score.clone();
+        Arrays.sort(clone);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = n - 1; i >= 0 ; i--) {
+            map.put(clone[i],n - 1 - i);
+        }
+        String[] ss = new String[]{"Gold Medal","Silver Medal","Bronze Medal"};
+        for (int i = 0; i < n; i++) {
+            int rank = map.get(score[i]);
+            ans[i] = rank < 3 ? ss[rank] : String.valueOf(rank + 1);
+        }
+        return ans;
+    }
+
+
+
+    /**商店中新到 n 支雪糕，用长度为 n 的数组 costs 表示雪糕的定价，其中 costs[i] 表示第 i 支雪糕的现金价格。Tony 一共有 coins 现金可以用于消费，他想要买尽可能多的雪糕。
+
+     注意：Tony 可以按任意顺序购买雪糕。
+
+     给你价格数组 costs 和现金量 coins ，请你计算并返回 Tony 用 coins 现金能够买到的雪糕的 最大数量 。
+
+     你必须使用计数排序解决此问题。
+     **/
+    public int maxIceCream(int[] costs, int coins) {
+        Arrays.sort(costs);
+        int count = 0;
+        for (int i = 0; i < costs.length; i++) {
+            coins -= costs[i];
+            if (0 <= coins) count++;
+            else break;
+        }
+        return count;
+    }
+
+    public int maxIceCream01(int[] costs, int coins) {
+        int[] freq = new int[100001];
+        // 记录数组 costs 中的每个元素出现的次数
+        for (int cost : costs) {
+            freq[cost]++;
+        }
+        int count = 0;
+        for (int i = 1; i <= 100000; i++) {
+            //如果该下标不超过剩余的硬币数
+            if (coins >= i) {
+                // 则根据下标值和该下标处的元素值计算价格为该下标的雪糕的可以购买的最大数量
+                int curCount = Math.min(freq[i], coins / i);
+                count += curCount;
+                // 将硬币数减去购买当前雪糕的花费
+                coins -= i * curCount;
+            } else {
+                break;
+            }
+        }
+        return count;
+    }
+
 
 
 
