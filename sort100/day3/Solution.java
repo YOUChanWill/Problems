@@ -529,7 +529,92 @@ public class Solution {
 
     /**输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。**/
     public String minNumber(int[] nums) {
-
+        String[] strs = new String[nums.length];
+        for(int i = 0; i < nums.length; i++)
+            strs[i] = String.valueOf(nums[i]);
+        quickSort(strs, 0, strs.length - 1);
+        StringBuilder res = new StringBuilder();
+        for(String s : strs)
+            res.append(s);
+        return res.toString();
     }
+
+
+    void quickSort(String[] strs, int l, int r) {
+        if(l >= r) return;
+        int i = l, j = r;
+        String tmp = strs[i];
+        while(i < j) {
+            while((strs[j] + strs[l]).compareTo(strs[l] + strs[j]) >= 0 && i < j) j--;
+            while((strs[i] + strs[l]).compareTo(strs[l] + strs[i]) <= 0 && i < j) i++;
+            tmp = strs[i];
+            strs[i] = strs[j];
+            strs[j] = tmp;
+        }
+        strs[i] = strs[l];
+        strs[l] = tmp;
+        quickSort(strs, l, i - 1);
+        quickSort(strs, i + 1, r);
+    }
+
+
+    public String minNumber01(int[] nums) {
+        String[] strs = new String[nums.length];
+        for(int i = 0; i < nums.length; i++)
+            strs[i] = String.valueOf(nums[i]);
+        Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
+        StringBuilder res = new StringBuilder();
+        for(String s : strs)
+            res.append(s);
+        return res.toString();
+    }
+
+
+    public String minNumber02(int[] nums) {
+        StringBuffer res = new StringBuffer();
+        quick(nums,0,nums.length-1);
+        for(int i = 0;i < nums.length;i++){
+            res.append(nums[i]);
+        }
+        return res.toString();
+    }
+
+    public void quick(int[] nums,int left,int right){
+        if(left >= right){
+            return;
+        }
+        long temp = nums[left];
+        int index = left;
+        long y = 1;
+        while(temp >= y) {
+            y *= 10;
+        }
+        if(temp == 0){
+            y = 10;
+        }
+        for(int i = left + 1;i <= right ;i++){
+            long x = 1;
+            while(nums[i] >= x){
+                x *=10;
+            }
+            if(nums[i] == 0){
+                x *=10;
+            }
+            if(temp * x + nums[i] >= nums[i] * y + temp){
+                index++;
+                swap01(nums,index,i);
+            }
+        }
+        swap01(nums,left,index);
+        quick(nums,left,index-1);
+        quick(nums,index+1,right);
+    }
+
+    public void swap01(int[] nums,int x,int y){
+        int temp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = temp;
+    }
+
 
 }
