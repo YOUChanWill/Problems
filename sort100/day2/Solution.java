@@ -448,10 +448,6 @@ public class Solution {
         return ans;
     }
 
-
-
-
-
     public static void main(String[] args) {
         int[] ints = {1, 2, 3, 4, 5, 6, 7, 8};
         int[] a = sortArrayByParity(ints);
