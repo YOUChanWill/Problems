@@ -5,7 +5,6 @@ import java.util.HashSet;
 
 public class Solution {
 
-
     /**有 N 位扣友参加了微软与力扣举办了「以扣会友」线下活动。主办方提供了 2*N 道题目，
      * 整型数组 questions 中每个数字对应了每道题目所涉及的知识点类型。
      * 若每位扣友选择不同的一题，请返回被选的 N 道题目至少包含多少种知识点类型。**/
@@ -27,13 +26,75 @@ public class Solution {
     }
 
 
-
     /**给你两个整数数组 arr1 ， arr2 和一个整数 d ，请你返回两个数组之间的 距离值 。
      「距离值」 定义为符合此距离要求的元素数目：对于元素 arr1[i] ，不存在任何元素 arr2[j] 满足 |arr1[i]-arr2[j]| <= d 。**/
     public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
-
+        int ans = 0;
+        for (int i = 0; i < arr1.length; i++) {
+            boolean flag = true;
+            for (int j = 0; j < arr2.length; j++) {
+                if (Math.abs(arr1[i] - arr2[j]) <= d) flag = false;
+            }
+            if (flag) ans++;
+        }
+        return ans;
     }
 
+
+    public int findTheDistanceValue01(int[] arr1, int[] arr2, int d) {
+        Arrays.sort(arr2); // 先对arr2进行排序
+        int cnt = 0;
+        for (int x : arr1) {
+            int p = binarySearch(arr2, x); // 对于arr1中的数，在arr2中找到大于等于的数
+            boolean ok = true;
+            if (p < arr2.length) { // 如果arr2中与其相邻的数的差都要比d大，则count加1
+                ok &= arr2[p] - x > d;
+            }
+            // 对于arr1中的数，在arr2中找到小于的数
+            if (p - 1 >= 0 && p - 1 <= arr2.length) {
+                ok &= x - arr2[p - 1] > d; // 如果arr2中与其相邻的数的差都要比d大，则count加1
+            }
+            cnt += ok ? 1 : 0;
+        }
+        return cnt;
+    }
+
+    // 二分查找
+    public int binarySearch(int[] arr, int target) {
+        int low = 0, high = arr.length - 1;
+        if (arr[high] < target) {
+            return high + 1;
+        }
+        while (low < high) {
+            int mid = (high - low) / 2 + low;
+            if (arr[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+
+    public int findTheDistanceValue02(int[] arr1, int[] arr2, int d) {
+        int result = 0;
+        for (int number : arr1) {
+            if (check4Single(number, arr2, d)) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private boolean check4Single(int number, int[] arr2, int d) {
+        for (int pair : arr2) {
+            if (Math.abs(number - pair) <= d) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**给你一个 下标从 0 开始 的整数数组 nums ，其中 nums[i] 表示第 i 名学生的分数。另给你一个整数 k 。
      从数组中选出任意 k 名学生的分数，使这 k 个分数间 最高分 和 最低分 的 差值 达到 最小化 。
