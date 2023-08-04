@@ -11,8 +11,19 @@ public class Solution {
      * 若每位扣友选择不同的一题，请返回被选的 N 道题目至少包含多少种知识点类型。**/
     public int halfQuestions(int[] questions) {
         int person = questions.length / 2;
-        int lengh = questions.length;
-
+        int n = questions.length;
+        int[] countNum = new int[1001]; // 用于存储类型出现的次数
+        for (int i = 0; i < n; i++) {
+            countNum[questions[i]]++;
+        }
+        Arrays.sort(countNum);
+        // 依次减去最大的数，再判断选取的数目是否超过总人数
+        int ans = 0;
+        for(int i=1000; person>0; i--){
+            ans++;
+            person -= countNum[i];
+        }
+        return ans;
     }
 
 
