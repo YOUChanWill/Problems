@@ -1,7 +1,10 @@
 package day4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.stream.IntStream;
 
 public class Solution {
 
@@ -149,13 +152,17 @@ public class Solution {
 
      返回所有种子都开花的 最早 一天是第几天。**/
     public int earliestFullBloom(int[] plantTime, int[] growTime) {
-        int ans = -1, n = plantTime.length;
-
+        int n = plantTime.length, ans = Integer.MIN_VALUE;
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; i++) idx[i] = i;
+        // 针对编号排序，根据生长时间 从大到小
+        Arrays.sort(idx, (i, j) -> growTime[j] - growTime[i]);
+        for (int i = 0, sum = 0; i < n; i++) {
+            sum += plantTime[idx[i]];
+            ans = Math.max(ans, sum + growTime[idx[i]]);
+        }
+        return ans;
     }
-
-
-
-
 
     /**爱丽丝和鲍勃拥有不同总数量的糖果。给你两个数组 aliceSizes 和 bobSizes ，
      * aliceSizes[i] 是爱丽丝拥有的第 i 盒糖果中的糖果数量，bobSizes[j] 是鲍勃拥有的第 j 盒糖果中的糖果数量。
@@ -185,7 +192,6 @@ public class Solution {
     }
 
 
-
     /**班里有 m 位学生，共计划组织 n 场考试。给你一个下标从 0 开始、大小为 m x n 的整数矩阵 score ，
      * 其中每一行对应一位学生，而 score[i][j] 表示第 i 位学生在第 j 场考试取得的分数。矩阵 score 包含的整数 互不相同 。
 
@@ -196,7 +202,5 @@ public class Solution {
         Arrays.sort(score,(a,b)->b[k]-a[k]);
         return score;
     }
-
-
 
 }
