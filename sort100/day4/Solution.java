@@ -1,6 +1,7 @@
 package day4;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Solution {
 
@@ -92,6 +93,34 @@ public class Solution {
      返回一个整数数组 answer，其中 answer[0] 是爱丽丝必须交换的糖果盒中的糖果的数目，answer[1] 是鲍勃必须交换的糖果盒中的糖果的数目。
      如果存在多个答案，你可以返回其中 任何一个 。题目测试用例保证存在与输入对应的答案。**/
     public int[] fairCandySwap(int[] aliceSizes, int[] bobSizes) {
+        int bob = Arrays.stream(bobSizes).sum(), alice = 0;
+        int[] answer = new int[2];
+        HashSet<Integer> set = new HashSet<>();
+        for (int x :
+                aliceSizes) {
+            alice += x;
+            set.add(x);
+        }
+        int ans = (alice - bob) / 2;
+        for (int x :
+                bobSizes) {
+            if (set.contains(x + ans)) {
+                answer[0] = x + ans;
+                answer[1] = x;
+            }
+        }
+        return answer;
+    }
+
+
+
+    /**班里有 m 位学生，共计划组织 n 场考试。给你一个下标从 0 开始、大小为 m x n 的整数矩阵 score ，
+     * 其中每一行对应一位学生，而 score[i][j] 表示第 i 位学生在第 j 场考试取得的分数。矩阵 score 包含的整数 互不相同 。
+
+     另给你一个整数 k 。请你按第 k 场考试分数从高到低完成对这些学生（矩阵中的行）的排序。
+
+     返回排序后的矩阵。**/
+    public int[][] sortTheStudents(int[][] score, int k) {
 
     }
 
