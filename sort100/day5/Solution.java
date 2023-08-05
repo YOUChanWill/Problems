@@ -1,9 +1,8 @@
 package day5;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.omg.CORBA.OMGVMCID;
+
+import java.util.*;
 
 public class Solution {
 
@@ -45,6 +44,26 @@ public class Solution {
     public int[] findEvenNumbers(int[] digits) {
         ArrayList<Integer> ans = new ArrayList<>();
 
+    }
+
+
+
+    /**给你一个整数数组 arr，请你检查是否存在两个整数 N 和 M，满足 N 是 M 的两倍（即，N = 2 * M）。
+
+     更正式地，检查是否存在两个下标 i 和 j 满足：
+
+     i != j
+     0 <= i, j < arr.length
+     arr[i] == 2 * arr[j]
+     **/
+    public boolean checkIfExist(int[] arr) {
+        Set<Integer> set = new HashSet<>()
+        for (int x :
+                arr) {
+            if (set.contains(x) || set.contains(x * 4)) return true;
+            set.add(x * 2);
+        }
+        return false;
     }
 
 
