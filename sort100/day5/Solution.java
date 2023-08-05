@@ -42,10 +42,45 @@ public class Solution {
 
      将找出的所有互不相同的整数按 递增顺序 排列，并以数组形式返回。**/
     public int[] findEvenNumbers(int[] digits) {
-        ArrayList<Integer> ans = new ArrayList<>();
+        // 统计0 ~ 9各个数字的出现次数
+        int[] count = new int[10];
+        for(int digit: digits){
+            count[digit] ++;
+        }
 
+        // 百位、十位、个位按各自规则不重不漏的进行数字选取
+        // 各个位置选取之后统计结果减一，完成当前遍历后恢复（统计结果再加一）
+        List<Integer> list = new ArrayList<>();
+
+        // 百位按1 ~ 9取存在的数字（保证了顺序且不重复）
+        for(int i = 1; i < 10; i ++){
+            if(count[i] > 0){
+                count[i] --;
+                // 十位取剩余0 ~ 9中存在的数字（保证了顺序且不重复）
+                for(int j = 0; j < 10; j ++){
+                    if(count[j] > 0){
+                        count[j] --;
+                        // 个位取剩余存在的偶数（保证了顺序且不重复）
+                        for(int k = 0; k < 10; k += 2){
+                            if(count[k] > 0){
+                                list.add(i * 100 + j * 10 + k);
+                            }
+                        }
+                        count[j] ++;
+                    }
+                }
+                count[i] ++;
+            }
+        }
+
+        // 将有序的list按顺序转为int[]后返回
+        int size = list.size();
+        int[] ans = new int[size];
+        for(int i = 0; i < size; i ++){
+            ans[i] = list.get(i);
+        }
+        return ans;
     }
-
 
 
     /**给你一个整数数组 arr，请你检查是否存在两个整数 N 和 M，满足 N 是 M 的两倍（即，N = 2 * M）。
@@ -65,8 +100,6 @@ public class Solution {
         }
         return false;
     }
-
-
 
 
     /**假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
@@ -171,7 +204,5 @@ public class Solution {
         }
         return ans;
     }
-
-
 
 }
