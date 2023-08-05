@@ -68,12 +68,33 @@ public class Solution {
 
      数组的子序列是一个由数组派生出来的序列，它可以通过删除一些元素或不删除元素、且不改变其余元素的顺序而得到。**/
     public int findLHS(int[] nums) {
-
-
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int x :
+                nums) {
+            map.put(x, map.getOrDefault(x, 0) + 1); // 遇到相同的则value值加1
+        }
+        int ans = 0;
+        for (int x :
+                nums) {
+            if (map.containsKey(x - 1)) {
+                ans = Math.max(ans, map.get(x) + map.get(x - 1)); // 如果存在跟当前值差1的，则统计map中的value值
+            }
+        }
+        return ans; // 返回取到的最大值
     }
 
-
-
+    // 使用双指针进行滑动窗口
+    public int findLHS01(int[] nums) {
+        int res = 0;
+        Arrays.sort(nums);
+        for(int begin =0 ,end = 0; end < nums.length; end++){
+            while(end > begin && nums[end] - nums[begin] > 1) begin++;
+            if(nums[end] - nums[begin] == 1){
+                res = Math.max(res, end - begin + 1);
+            }
+        }
+        return res;
+    }
 
     /**给你一个整数数组 arr ，请你将数组中的每个元素替换为它们排序后的序号。
 
@@ -97,9 +118,6 @@ public class Solution {
         }
         return ans;
     }
-
-
-
 
     /**给你一个整数数组 nums ，统计并返回在 nums 中同时至少具有一个严格较小元素和一个严格较大元素的元素数目。**/
     public int countElements(int[] nums) {
