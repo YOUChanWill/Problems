@@ -92,7 +92,7 @@ public class Solution {
      arr[i] == 2 * arr[j]
      **/
     public boolean checkIfExist(int[] arr) {
-        Set<Integer> set = new HashSet<>()
+        Set<Integer> set = new HashSet<>();
         for (int x :
                 arr) {
             if (set.contains(x) || set.contains(x * 4)) return true;
@@ -203,6 +203,98 @@ public class Solution {
             if (x != min && x != max) ans++;
         }
         return ans;
+    }
+
+
+    /**给你一个非负整数数组 nums 。如果存在一个数 x ，使得 nums 中恰好有 x 个元素 大于或者等于 x ，那么就称 nums 是一个 特殊数组 ，而 x 是该数组的 特征值 。
+
+     注意： x 不必 是 nums 的中的元素。
+
+     如果数组 nums 是一个 特殊数组 ，请返回它的特征值 x 。否则，返回 -1 。可以证明的是，如果 nums 是特殊数组，那么其特征值 x 是 唯一的 。**/
+    public int specialArray(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        // 实现原数组的降序
+        for (int i = 0 ,j = n - 1; i < j; i++ ,j--) {
+            nums[i] ^= nums[j];
+            nums[j] ^= nums[i];
+            nums[i] ^= nums[j];
+        }
+        for (int i = 1; i <= n; i++) {
+            if (nums[i - 1] >= i && (i == n || nums[i] < i)) return i;
+        }
+        return -1;
+    }
+
+
+    /**给你一个房屋数组houses 和一个整数 k ，其中 houses[i] 是第 i 栋房子在一条街上的位置，现需要在这条街上安排 k 个邮筒。
+
+     请你返回每栋房子与离它最近的邮筒之间的距离的 最小 总和。
+
+     答案保证在 32 位有符号整数范围以内。**/
+    public int minDistance(int[] houses, int k) {
+        int n = houses.length;
+        Arrays.sort(houses);
+
+        int[][] medsum = new int[n][n];
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = i + 1; j < n; ++j) {
+                medsum[i][j] = medsum[i + 1][j - 1] + houses[j] - houses[i];
+            }
+        }
+
+        int[][] f = new int[n][k + 1];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(f[i], Integer.MAX_VALUE / 2);
+        }
+        for (int i = 0; i < n; ++i) {
+            f[i][1] = medsum[0][i];
+            for (int j = 2; j <= k && j <= i + 1; ++j) {
+                for (int i0 = 0; i0 < i; ++i0) {
+                    f[i][j] = Math.min(f[i][j], f[i0][j - 1] + medsum[i0 + 1][i]);
+                }
+            }
+        }
+
+        return f[n - 1][k];
+    }
+
+
+    public int minDistance01(int[] houses, int k) {
+        Arrays.sort(houses);
+        int n = houses.length;
+        int[][] dp = new int[k + 1][n + 1];
+        for (int i = 0; i < k + 1; i++) {
+            Arrays.fill(dp[i], 0x3f3f3f3f);
+            dp[i][0] = 0;
+        }
+        for (int i = 1; i <= k; i++) {
+            for (int j = 1; j <= n; j++) {
+                // 第i个邮筒不分配房子时 此时j个房子到i-1个邮局的距离为
+                dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+                // 第i个邮局最多可以分配j个房子
+                int cost = 0;
+                for (int l = 1; l <= j; l++) {
+                    // 给第i邮局分配l个房子 求该邮局将这些房子距离它的距离加起来
+                    // 负责房子的范围是 [j - l, j - 1] 放一个邮局
+                    // 因为此问题中，邮局位置不是固定的，而房屋位置是固定的 因此不可以累加 转换为求局部房屋之间
+                    // 任选一个位置作为邮局 使得在这局部房屋之间距离最短
+                    // [j - l ,  j - 1] 为什么是[j - l, j - 1] 而不是[j - l - 1, j - 1]需要思考一下
+                    cost = getRes(houses, j - l, j - 1);
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - l] + cost);
+                }
+            }
+        }
+        return dp[k][n];
+    }
+    public int getRes(int[] houses, int i, int j){
+        int res = 0;
+        while (i < j){
+            res += houses[j] - houses[i];
+            j--;
+            i++;
+        }
+        return res;
     }
 
 }
