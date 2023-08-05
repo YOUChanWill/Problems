@@ -3,6 +3,7 @@ package day5;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
 
@@ -56,10 +57,17 @@ public class Solution {
 
      你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。**/
     public int findContentChildren(int[] g, int[] s) {
-        int ans = 0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int n = g.length, m = s.length, ans = 0;
+        for (int i = 0 ,j = 0; i < n && j < m; i++ ,j++) {
+            while (j < m && g[i] > s[j]) j++;
+            if (j < m){
+                ans++;
+            }
+        }
+        return ans;
     }
-
-
 
 
     /**和谐数组是指一个数组里元素的最大值和最小值之间的差别 正好是 1 。
