@@ -208,7 +208,98 @@ public class Solution {
         return m1 >= m2 * 2 ? index : -1;
     }
 
+    /**集合 s 包含从 1 到 n 的整数。不幸的是，因为数据错误，导致集合里面某一个数字复制了成了集合里面的另外一个数字的值，导致集合 丢失了一个数字 并且 有一个数字重复 。
+
+     给定一个数组 nums 代表了集合 S 发生错误后的结果。
+
+     请你找出重复出现的整数，再找到丢失的整数，将它们以数组的形式返回。**/
     public int[] findErrorNums(int[] nums) {
+        int[] ans = new int[2];
+        HashSet<Integer> set = new HashSet<>();
+        for (int x :
+                nums) {
+            if (!set.add(x)) {
+                ans[0] = x;
+            }
+        }
+        int n = nums.length;
+        for (int i = 1; i <= n; i++) {
+            if (set.add(i)) ans[1] = i;
+        }
+        return ans;
+    }
+
+    public int[] findErrorNums01(int[] nums) {
+        int dup = -1, miss = -1;
+        for (int i = 0; i < nums.length; i++) {
+            int idx = Math.abs(nums[i]) - 1;
+            if (nums[idx] < 0) {
+                dup = idx + 1;
+            }
+            nums[idx] = -nums[idx];
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0 && i + 1 != dup) {
+                miss = i + 1;
+                break;
+            }
+        }
+        return new int[]{dup, miss};
+    }
+
+    // 重复的数字在数组中出现 2次，丢失的数字在数组中出现 0 次，其余的每个数字在数组中出现 1 次。
+    // 重复的数字和丢失的数字的出现次数的奇偶性相同
+    public int[] findErrorNums02(int[] nums) {
+        int n = nums.length;
+        int xor = 0;
+        for (int num : nums) {
+            xor ^= num;
+        }
+        for (int i = 1; i <= n; i++) {
+            xor ^= i;
+        }
+        int lowbit = xor & (-xor);
+        int num1 = 0, num2 = 0;
+        for (int num : nums) {
+            if ((num & lowbit) == 0) {
+                num1 ^= num;
+            } else {
+                num2 ^= num;
+            }
+        }
+        for (int i = 1; i <= n; i++) {
+            if ((i & lowbit) == 0) {
+                num1 ^= i;
+            } else {
+                num2 ^= i;
+            }
+        }
+        for (int num : nums) {
+            if (num == num1) {
+                return new int[]{num1, num2};
+            }
+        }
+        return new int[]{num2, num1};
+    }
+
+    public int[] findErrorNums03(int[] nums) {
+        int[] ans = new int[2];
+        int[] hash = new int[nums.length + 1];
+        for (int num : nums) {
+            if (++hash[num] == 2) {
+                ans[0] = num;
+            }
+        }
+        for (int i = 1; i <= nums.length; i++) {
+            if (hash[i] == 0) {
+                ans[1] = i;
+            }
+        }
+        return ans;
+    }
+
+    /**给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。*/
+    public int[] topKFrequent(int[] nums, int k) {
 
     }
 
