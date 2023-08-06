@@ -300,15 +300,67 @@ public class Solution {
 
     /**给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。*/
     public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        // 统计出现的频率
+        for (int num : nums) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+        // 使用优先队列来维护前k个元素
+        PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
 
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            minHeap.offer(entry);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+
+        int[] result = new int[k];
+        int i = 0;
+
+        while (!minHeap.isEmpty()) {
+            result[i++] = minHeap.poll().getKey();
+        }
+
+        return result;
     }
 
 
-
-
-
-
-
-
+    public int[] topKFrequent01(int[] nums, int k) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int num : nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        if (min == max) {
+            return new int[]{nums[0]};
+        }
+        int[] counts = new int[max - min + 1];
+        for (int num : nums) {
+            ++counts[num - min];
+        }
+        int maxCount = nums.length;
+        List<Integer>[] countLists = new List[maxCount + 1];
+        for (int i = max - min; i >= 0; i--) {
+            int count = counts[i];
+            if (count > 0) {
+                if (countLists[count] == null) {
+                    countLists[count] = new ArrayList();
+                }
+                countLists[count].add(i + min);
+            }
+        }
+        int[] topK = new int[k];
+        for (int i = maxCount; i > 0 && k > 0; i--) {
+            List<Integer> list = countLists[i];
+            if (list != null) {
+                for (int j = list.size() - 1; j >= 0 && k > 0; j--) {
+                    topK[--k] = list.remove(j);
+                }
+            }
+        }
+        return topK;
+    }
 
 }
