@@ -2,7 +2,7 @@ package day1;
 
 import java.util.*;
 
-public class Solution {
+public class solution {
 
     /**
      * 给你一个 m x n 大小的矩阵 grid ，由若干正整数组成。
@@ -473,10 +473,6 @@ public class Solution {
         }
         Collections.sort(res, Comparator.comparingInt(a -> a.get(0)));
         return res;
-    }
-
-    public static void main(String[] args) {
-
     }
 
 }
