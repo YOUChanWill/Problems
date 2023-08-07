@@ -135,7 +135,89 @@ public class Solution {
 
      注意，重排各位数字后，num 的符号不会改变。**/
     public long smallestNumber(long num) {
-        
+        // 如果是负数，则从大到小排序得到最小值
+        if(num<0){
+            num=-num;
+            int count[]=new int[10];
+            while(num>0){
+                count[(int)(num%10)]++;
+                num/=10;
+            }
+            long ans=0;
+            for(int i=9;i>=0;i--){for(int j=0;j<count[i];j++){ans=10*ans+i;}}
+            return -ans;
+        }
+        // 如果是正数，则从小到达排序，将0插入下标为1的位置
+        else if(num>0){
+            int count[]=new int[10];
+            while(num>0){
+                count[(int)(num%10)]++;
+                num/=10;
+            }
+            StringBuilder ans=new StringBuilder();
+            for(int i=1;i<10;i++){for(int j=0;j<count[i];j++){ans.append(i);}}
+            for(int i=0;i<count[0];i++){ans.insert(1,"0");}
+            return Long.parseLong(ans.toString());
+        }
+        return 0;
+    }
+
+    public long smallestNumber01(long num) {
+        //利用数组下标的天然有序性省去排序步骤，进行计数统计即可
+        if(num == 0 || num < 10L && num > -10L) return num;
+        long ans = 0L, f = 1L;
+        int[] map = new int[10];
+        if(num < 0)
+        {
+            f = -1L;
+            num = -num;
+        }
+        while(num != 0)
+        {
+            map[(int)(num % 10)]++;
+            num /= 10L;
+        }
+        if(f > 0)
+        {
+            for(int i = 1; i < 10; i++)
+            {
+                if(map[i] != 0)
+                {
+                    ans = i * 1L;
+                    map[i]--;
+                    break;
+                }
+            }
+            for(int i = 0; i < 10; i++)
+            {
+                while(map[i] != 0)
+                {
+                    ans = ans * 10L + i;
+                    map[i]--;
+                }
+            }
+        }
+        else
+        {
+            for(int i = 9; i > 0; i--)
+            {
+                if(map[i] != 0)
+                {
+                    ans = i * 1L;
+                    map[i]--;
+                    break;
+                }
+            }
+            for(int i = 9; i >= 0; i--)
+            {
+                while(map[i] != 0)
+                {
+                    ans = ans * 10L + i;
+                    map[i]--;
+                }
+            }
+        }
+        return f * ans;
     }
 
 
@@ -209,6 +291,62 @@ public class Solution {
                 int cnt = map.getOrDefault(t + i, 0);
                 if (cnt == 0) return false;
                 map.put(t + i, cnt - 1);
+            }
+        }
+        return true;
+    }
+
+    /**给你一个下标从 0 开始的字符串 words ，其中 words[i] 由小写英文字符组成。
+
+     在一步操作中，需要选出任一下标 i ，从 words 中 删除 words[i] 。其中下标 i 需要同时满足下述两个条件：
+
+     0 < i < words.length
+     words[i - 1] 和 words[i] 是 字母异位词 。
+     只要可以选出满足条件的下标，就一直执行这个操作。
+
+     在执行所有操作后，返回 words 。可以证明，按任意顺序为每步操作选择下标都会得到相同的结果。
+
+     字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。例如，"dacb" 是 "abdc" 的一个字母异位词。**/
+    public List<String> removeAnagrams(String[] words) {
+        ArrayList<String> ans = new ArrayList<>();
+        String pre = " ";
+        for (int i = 0; i < words.length; ++i) {
+            char[] cs = words[i].toCharArray();
+            Arrays.sort(cs);
+            String s = String.valueOf(cs);
+            if (i >= 1 && s.equals(pre)) continue;
+            ans.add(words[i]);
+            pre = s;
+        }
+        return ans;
+    }
+
+
+    public List<String> removeAnagrams01(String[] words) {
+        List<String> list = new ArrayList<>();
+        list.add(words[0]);
+        for (int i = 1; i < words.length; i++) {
+            if (!equals(words[i - 1], words[i])) {
+                list.add(words[i]);
+            }
+        }
+        return list;
+    }
+
+    boolean equals(String a, String b) {
+        if (a.length() != b.length()) {
+            return false;
+        }
+        int[] count = new int['z' - 'a' + 1];
+        for (char c : a.toCharArray()) {
+            count[c - 'a']++;
+        }
+        for (char c : b.toCharArray()) {
+            count[c - 'a']--;
+        }
+        for (int c : count) {
+            if (c != 0) {
+                return false;
             }
         }
         return true;
