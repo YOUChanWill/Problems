@@ -1,9 +1,6 @@
 package day7;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Solution {
 
@@ -132,16 +129,89 @@ public class Solution {
         return minMoves;
     }
 
-
-
-
     /**给你一个整数 num 。重排 num 中的各位数字，使其值 最小化 且不含 任何 前导零。
 
      返回不含前导零且值最小的重排数字。
 
      注意，重排各位数字后，num 的符号不会改变。**/
     public long smallestNumber(long num) {
+        
+    }
 
+
+    /**Alice 手中有一把牌，她想要重新排列这些牌，分成若干组，使每一组的牌数都是 groupSize ，并且由 groupSize 张连续的牌组成。
+
+     给你一个整数数组 hand 其中 hand[i] 是写在第 i 张牌上的数值。如果她可能重新排列这些牌，返回 true ；否则，返回 false 。**/
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        int lengh = hand.length;
+        if (lengh % groupSize != 0) return false;
+        if (lengh == 1) return true;
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Arrays.sort(hand);// 对数组进行排序
+        for (int x :
+                hand) {
+            // 统计每个元素的个数
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+        // 从排好序的数组中取出元素与哈希表进行判断
+        for (int x :
+                hand) {
+            if (!map.containsKey(x)) continue;
+
+            for (int i = 0; i < groupSize; i++) {
+                // 因为排好序，所以当前一定是可以构成顺子中最小的一张
+                int num = x + i;
+                if (!map.containsKey(num)) return false;
+                map.put(num,map.get(num) - 1);
+                // 如果该元素用完了，则从哈希表中删去
+                if (map.get(num) == 0) map.remove(num);
+            }
+        }
+        return true;
+    }
+
+    public boolean isNStraightHand01(int[] hand, int groupSize) {
+        if (groupSize == 1) return true;
+        int len = hand.length, left = 0, right = 0;
+        if (len % groupSize != 0) return false;
+        Arrays.sort(hand);
+        while (left < len) {
+            int group = groupSize, temp = hand[left];
+            right = left + 1;
+            while (group > 1) {
+                while (right < len && (hand[right] == temp || right == 0 || hand[right] == 0)) right++;
+                if (right >= len || hand[right] - temp != 1) return false;
+                else {
+                    temp = hand[right];
+                    hand[right] = 0;
+                    right++;
+                    group--;
+                }
+            }
+            left++;
+            while (left < right && hand[left] == 0) left++;
+        }
+        return true;
+    }
+
+    public boolean isNStraightHand02(int[] hand, int m) {
+        Map<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Integer> q = new PriorityQueue<>((a,b)->a-b);
+        for (int i : hand) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+            q.add(i);
+        }
+        while (!q.isEmpty()) {
+            int t = q.poll();
+            if (map.get(t) == 0) continue;
+            for (int i = 0; i < m; i++) {
+                int cnt = map.getOrDefault(t + i, 0);
+                if (cnt == 0) return false;
+                map.put(t + i, cnt - 1);
+            }
+        }
+        return true;
     }
 
 
