@@ -1,6 +1,7 @@
 package day7;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -85,4 +86,64 @@ public class Solution {
         a[i] = a[j];
         a[j] = temp;
     }
+
+    /**设计一个算法，找出数组中最小的k个数。以任意顺序返回这k个数均可。**/
+    public int[] smallestK(int[] arr, int k) {
+        int[] ans = new int[k];
+        Arrays.sort(arr);
+        for (int i = 0; i < k; i++) {
+            ans[i] = arr[i];
+        }
+        return ans;
+    }
+
+    // 使用快速排序
+    public int[] smallestK01(int[] arr, int k) {
+        quickSelect(arr, 0, arr.length - 1, k);
+        int[] vec = new int[k];
+        for (int i = 0; i < k; ++i) {
+            vec[i] = arr[i];
+        }
+        return vec;
+    }
+
+    /**给你一个长度为 n 的整数数组 nums ，返回使所有数组元素相等需要的最小操作数。
+
+     在一次操作中，你可以使数组中的一个元素加 1 或者减 1 。**/
+    public int minMoves2(int[] nums) {
+        Arrays.sort(nums);
+        int lengh = nums.length, sum = 0, mid = nums[(lengh - 1) / 2];
+        for (int x :
+                nums) {
+            sum += Math.abs(mid - x);
+        }
+        return sum;
+    }
+
+    public int minMoves201(int[] nums) {
+        Arrays.sort(nums);
+        int i = 0, j = nums.length - 1;
+        int minMoves = 0;
+        while (i < j) {
+            minMoves += nums[j] - nums[i];
+            i++;
+            j--;
+        }
+        return minMoves;
+    }
+
+
+
+
+    /**给你一个整数 num 。重排 num 中的各位数字，使其值 最小化 且不含 任何 前导零。
+
+     返回不含前导零且值最小的重排数字。
+
+     注意，重排各位数字后，num 的符号不会改变。**/
+    public long smallestNumber(long num) {
+
+    }
+
+
+
 }
