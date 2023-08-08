@@ -140,7 +140,96 @@ public class Solution {
     }
 
 
+    /**给你一个包含若干 互不相同 整数的数组 nums ，你需要执行以下操作 直到数组为空 ：
 
+     如果数组中第一个元素是当前数组中的 最小值 ，则删除它。
+     否则，将第一个元素移动到数组的 末尾 。
+     请你返回需要多少个操作使 nums 为空。**/
+    public long countOperationsToEmptyArray(int[] nums) {
+        int n = nums.length;
+        Integer[] id = new Integer[n];
+        for (int i = 0; i < n; ++i)
+            id[i] = i;
+        Arrays.sort(id, (i, j) -> nums[i] - nums[j]);
 
+        long ans = n; // 先把 n 计入答案
+        for (int k = 1; k < n; ++k)
+            if (id[k] < id[k - 1]) // 必须多走一整圈
+                ans += n - k; // 减去前面删除的元素个数
+        return ans;
+    }
+
+    public long countOperationsToEmptyArray01(int[] nums) {
+        Map<Integer, Integer> pos = new HashMap<>();
+        long n = nums.length, res = n;
+        for (int i = 0; i < n; ++i)
+            pos.put(nums[i], i);
+        Arrays.sort(nums);
+        for (int i = 1; i < n; ++i)
+            if (pos.get(nums[i]) < pos.get(nums[i - 1]))
+                res += n - i;
+        return res;
+    }
+
+    /**给定一个 24 小时制（小时:分钟 "HH:MM"）的时间列表，找出列表中任意两个时间的最小时间差并以分钟数表示。**/
+    public int findMinDifference(List<String> timePoints) {
+        int n = timePoints.size();
+        if (n > 1440) return 0;
+        // 当天最多只有 60∗24=144060 * 24 = 144060∗24=1440 个不同的时间点（跨天的话则是双倍）
+        int[] cnt = new int[1440 * 2 + 10];
+        for (String s: timePoints ) {
+            String[] ss = s.split(":");
+            int h = Integer.parseInt(ss[0]),m = Integer.parseInt(ss[1]);
+            cnt[60 * h + m]++;
+            cnt[60 * h + m + 1440]++;
+        }
+        // 找到间隔最小两个时间点
+        int ans = 1440, last = -1;
+        for (int i = 0; i <= 1440 * 2 && ans != 0; i++) {
+            if (cnt[i] == 0) continue;
+            if (cnt[i] > 1) ans = 0;
+            else if (last != -1) ans = Math.min(ans,i - last);
+            last = i;
+        }
+        return ans;
+    }
+
+    public int findMinDifference01(List<String> timePoints) {
+        if(timePoints.size()>1440) return 0;
+
+        boolean[] times=new boolean[1440];
+        for(String time:timePoints){
+            String[] s1=time.split(":");
+            int i=Integer.parseInt(s1[0])*60+Integer.parseInt(s1[1]);
+            if(times[i]){
+                return 0;
+            }
+            times[i]=true;
+        }
+
+        int minDiff=times.length-1;
+        int first=Integer.MAX_VALUE;
+        int last=Integer.MIN_VALUE;
+        int prev=-1;
+        for(int i=0;i<times.length;i++){
+            if(times[i]){
+                if(prev!=-1){
+                    minDiff=Math.min(minDiff,i-prev);
+                }
+                prev=i;
+                first=Math.min(i,first);
+                last=Math.max(i,last);
+            }
+        }
+        minDiff=Math.min(minDiff,first+1440-last);
+        return minDiff;
+    }
+
+    /**给你一个下标从 0 开始的数组 nums ，数组中的元素都是 正 整数。请你选出两个下标 i 和 j（i != j），且 nums[i] 的数位和 与  nums[j] 的数位和相等。
+
+     请你找出所有满足条件的下标 i 和 j ，找出并返回 nums[i] + nums[j] 可以得到的 最大值 。**/
+    public int maximumSum(int[] nums) {
+
+    }
 
 }
