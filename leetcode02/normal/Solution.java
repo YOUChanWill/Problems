@@ -85,6 +85,50 @@ public class Solution {
     }
 
 
+    /**给你一个整数数组 nums 。一个子数组 [numsl, numsl+1, ..., numsr-1, numsr] 的
+     * 和的绝对值 为 abs(numsl + numsl+1 + ... + numsr-1 + numsr) 。
+
+     请你找出 nums 中 和的绝对值 最大的任意子数组（可能为空），并返回该 最大值 。**/
+    public int maxAbsoluteSum(int[] nums) {
+        int ans = 0, Max = 0, Min = 0;
+        for (int x :
+                nums) {
+            Max = Math.max(Max, 0) + x;
+            Min = Math.min(Min, 0) + x;
+            ans = Math.max(ans,Math.max(Max,-Min));
+        }
+        return ans;
+    }
+
+    public int maxAbsoluteSum01(int[] nums) {
+        //思路为找到子数组和的最大值与最小值，取绝对值最大的返回
+        //此处采用动态规划的方法。dpMax[i]表示以元素i为结尾的子数组的最大值，dpMin[i]与之相对
+        //那么所求ans=max(dpMax[n-1],abs(dpMin[n-1]))
+        //状态转移方程为：dpMax[i]=max(dpMax[i-1],dpMax[i-1]+nums[i]),dpMin与之相对
+        //观察到dp[i]只与dp[i-1]以及nums[i]有关，故可以进行空间压缩
+        //考虑正负,用两个变量分别承接正负数
+        /*int dpMax=0,dpMin=0,positiveSum=0,negativeSum=0;
+        for(int num:nums){
+            positiveSum+=num;
+            dpMax=Math.max(dpMax,positiveSum);
+            positiveSum=Math.max(0,positiveSum);
+            negativeSum+=num;
+            dpMin=Math.min(dpMin,negativeSum);
+            negativeSum=Math.min(negativeSum,0);
+        }
+        return Math.max(dpMax,-dpMin);*/
+        //下面是前缀和的解法
+        //由于子数组和等于两个前缀和的差，那么取前缀和中的最大值与最小值，它俩的差就是答案。
+        int preSum=0,max=0,min=0;
+        for(int num:nums){
+            preSum+=num;
+            if(preSum>max) max=preSum;
+            else if(preSum<min) min=preSum;
+        }
+        return max-min;
+    }
+
+
 
 
 
