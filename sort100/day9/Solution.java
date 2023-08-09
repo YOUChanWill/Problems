@@ -218,6 +218,27 @@ public class Solution {
     }
 
 
+    /**给定一个字符串 s ，根据字符出现的 频率 对其进行 降序排序 。一个字符出现的 频率 是它出现在字符串中的次数。
+
+     返回 已排序的字符串 。如果有多个答案，返回其中任何一个。**/
+    public String frequencySort(String s) {
+        int[][] cnts = new int[128][2];
+        char[] cs = s.toCharArray();
+        for (int i = 0; i < 128; i++) cnts[i][0] = i;
+        for (char c : cs) cnts[c][1]++;
+        Arrays.sort(cnts, (a, b)->{
+            return a[1] != b[1] ? b[1] - a[1] : a[0] - b[0];
+        });
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 128; i++) {
+            char c = (char)cnts[i][0];
+            int k = cnts[i][1];
+            while (k-- > 0) sb.append(c);
+        }
+        return sb.toString();
+    }
+
+
 
 
 
