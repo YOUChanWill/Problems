@@ -238,8 +238,204 @@ public class Solution {
         return sb.toString();
     }
 
+    /**要求选手从 N 张卡牌中选出 cnt 张卡牌，
+     * 若这 cnt 张卡牌数字总和为偶数，则选手成绩「有效」且得分为 cnt 张卡牌数字总和。 给定数组 cards 和 cnt，
+     * 其中 cards[i] 表示第 i 张卡牌上的数字。 请帮参赛选手计算最大的有效得分。若不存在获取有效得分的卡牌方案，则返回 0**/
+    public int maxmiumScore(int[] cards, int cnt) {
+        Arrays.sort(cards);
+        int len = cards.length;
+        int sum = 0, count = 0, a1 = 0, a2 = 0;
+        for (int i = len - 1; i >= 0; i--) {
+            if (count == cnt) {
+                break;
+            }
+            // 最大的奇数
+            if (cards[i] % 2 != 0) {
+                a1 = cards[i];
+            }
+            // 最大的偶数
+            if (cards[i] % 2 == 0) {
+                a2 = cards[i];
+            }
+            sum += cards[i];
+            count++;
+        }
+        // 偶数直接返回
+        if (sum % 2 == 0) {
+            return sum;
+        }
+        // 不是偶数接着取
+        int a3 = 0, a4 = 0;
+        for (int i = len - 1 - cnt; i >= 0; i--) {
+            if (a3 != 0 && a4 != 0) {
+                break;
+            }
+            // 下一个奇数
+            if (a3 == 0 && cards[i] % 2 != 0) {
+                a3 = cards[i];
+            }
+            // 下一个偶数
+            if (a4 == 0 && cards[i] % 2 == 0) {
+                a4 = cards[i];
+            }
+        }
+        if (cnt == 1 && a4 == 0) {
+            return 0;
+        }
+        if (cnt == 1) {
+            return a4;
+        }
+        if (a3 == 0 || a4 == 0) {
+            if (a3 != 0) {
+                return a3 + sum - a2;
+            }
+            if (a4 != 0) {
+                return a4 + sum - a1;
+            } else {
+                return 0;
+            }
+        }
+        //01 010
+        if (a2 == 0){
+            return a4 + sum - a1;
+        }
+        return Math.max(a3 + sum - a2, a4 + sum - a1);
+    }
+
+    public int maxmiumScore01(int[] cards, int cnt) {
+        // 排序后，逆序遍历求前1、2、3、4、5.。。个的奇数或者偶数的和放入到odd和even中
+        Arrays.sort(cards);
+        int len = cards.length;
+        List<Integer> odd = new ArrayList<>(), even = new ArrayList<>();
+        odd.add(0); even.add(0);
+        for(int i=len-1;i>=0;i--){
+            if(cards[i]%2 == 1) odd.add(odd.get(odd.size()-1)+cards[i]);
+            else even.add(even.get(even.size()-1)+cards[i]);
+        }
+        // 枚举k从0开始，每次+2
+        int k = 0;
+        int ans = 0;
+        // 所以odd选择的必须是偶数，偶数的下表是0，2，4，6.。。。。，所以k=0，k+=2；
+        // 如果k=2，可能会出现全是偶数的情况，如果cnt=1，这是返回even，不会进入循环，and=0，错误，不理解可以忽略这一步
+        // 所以再while循环中，只需要满足k和cnt-k分别不越界，并且相加是偶数就可以把最大值记录下来，直到不满足循环退出
+        // 返回计算结果
+        while(k<=cnt){
+            if(k<odd.size()&&(cnt-k)<even.size()&&(odd.get(k)+even.get(cnt-k))%2==0)
+                ans = Math.max(ans, odd.get(k)+even.get(cnt-k));
+            k+=2;
+        }
+        return ans;
+    }
+
+    public int maxmiumScore02(int[] cards, int cnt) {
+        int max = 1000;
+
+        int[] count = new int[max +1];
+        for(int x:cards)
+            ++count[x];
+
+        int result = 0;
+        int lastOdd = max + 1;
+        int lastEven = max + 1;
+
+        for(int x = max; x > 0; --x){
+            if(count[x] == 0) continue;
+            int min = Math.min(cnt, count[x]);
+            result += min * x;
+            cnt -= min;
+            count[x] -= min;
+            if((x & 1) == 0)
+                lastEven = x;
+            else
+                lastOdd = x;
+            if(cnt == 0)
+                break;
+        }
+
+        if((result & 1) == 0) return result;
+
+        int last = Math.min(lastEven, lastOdd);
+
+        int delta1 = Integer.MIN_VALUE;
+        if(count[last] > 0 && lastEven <= max && lastOdd <= max)
+            delta1 = - Math.abs(lastOdd - lastEven);
+
+        int delta2 = Integer.MIN_VALUE;
+        for(int x = last - 1; x > 0; x -= 2){
+            if(count[x] > 0){
+                delta2 = x - last;
+                break;
+            }
+        }
+
+        int delta = Math.max(delta1, delta2);
+
+        return delta == Integer.MIN_VALUE? 0: result + delta;
+    }
+
+    /**给定一个字符串数组 strs ，将 变位词 组合在一起。 可以按任意顺序返回结果列表。
+
+     注意：若两个字符串中每个字符出现的次数都相同，则称它们互为变位词。**/
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+        for (String str : strs) {
+            char[] array = str.toCharArray();
+            Arrays.sort(array);
+            String key = new String(array);
+            ArrayList<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
 
 
+    /**给你一个整数数组 nums 和一个整数 k 。你可以将 nums 划分成一个或多个 子序列 ，使 nums 中的每个元素都 恰好 出现在一个子序列中。
 
+     在满足每个子序列中最大值和最小值之间的差值最多为 k 的前提下，返回需要划分的 最少 子序列数目。
+
+     子序列 本质是一个序列，可以通过删除另一个序列中的某些元素（或者不删除）但不改变剩下元素的顺序得到。**/
+    public int partitionArray(int[] nums, int k) {
+        Arrays.sort(nums);
+        int ans = 1, n = nums.length, min = nums[0];
+        if (n == 1 || n == 0) return 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] - min > k){
+                ans++;
+                min = nums[i];
+            }
+        }
+        return ans;
+    }
+
+    public int partitionArray01(int[] nums, int k) {
+
+        int min = 100001, max = 0;
+        for(int x:nums){
+            if(x < min) min = x;
+            if(x > max) max = x;
+        }
+        int n = max - min + 1;
+
+        if(n < k)
+            return 1;
+        int[] count = new int[n];
+        for(int x:nums)
+            ++count[x - min];
+
+        int result = 0;
+        int index = 0;
+        while(index < n)
+        {
+            if(count[index] > 0){
+                ++result;
+                index += k +1 ;
+            }else{
+                ++index;
+            }
+
+        }
+        return result;
+    }
 
 }
