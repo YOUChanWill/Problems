@@ -156,6 +156,66 @@ public class Solution {
     }
 
 
+    /**以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
+
+     * 请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。**/
+    public int[][] merge(int[][] intervals) {
+        int n=intervals.length;
+        if(n==0){
+            return new int[0][2];
+        }
+        Arrays.sort(intervals,new Comparator<int[]>(){
+            public int compare(int[] interval1,int[] interval2){
+                return interval1[0]-interval2[0];
+            }
+        });
+        List<int[]> merged =new ArrayList<>();
+        for(int i=0;i<n;i++){
+            int L=intervals[i][0],R=intervals[i][1];
+            if(merged.size()==0||merged.get(merged.size()-1)[1]<L){
+                merged.add(new int[]{L,R});
+            }else{
+                merged.get(merged.size()-1)[1]=Math.max(merged.get(merged.size()-1)[1],R);
+            }
+        }
+        return merged.toArray(new int[merged.size()][]);
+    }
+
+    public int[][] merge01(int[][] intervals) {
+        int max = -1;
+        int min = Integer.MAX_VALUE;
+        for(int[] i : intervals){
+            max = Math.max(max, i[1]);
+            min = Math.min(min, i[0]);
+        }
+        int len = max - min + 1;
+        int[] pos = new int[len];
+        for (int[] tuple : intervals) {
+            int index = tuple[0] - min;
+            if (pos[index] > 0) {
+                if(pos[index] < tuple[1] - min)
+                    pos[index] = tuple[1] - min;
+            } else {
+                pos[index] = tuple[1]-min;
+            }
+        }
+        int start = 0;
+        int end = pos[0];
+        ArrayList<int[]> result = new ArrayList<>(intervals.length >> 1);
+        for (int i = 1; i < len; i++) {
+            if (pos[i] != 0) {
+                if (i <= end) {
+                    end = Math.max(end,pos[i]);
+                } else {
+                    result.add(new int[]{start+min,end+min});
+                    start = i;
+                    end = pos[i];
+                }
+            }
+        }
+        result.add(new int[]{start+min,end+min});
+        return result.toArray(new int[][]{});
+    }
 
 
 
