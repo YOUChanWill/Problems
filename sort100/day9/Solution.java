@@ -1,6 +1,7 @@
 package day9;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Solution {
 
@@ -91,6 +92,9 @@ public class Solution {
         return ret;
     }
 
+    public List<Integer> majorityElement(int[] nums) {
+
+    }
 
 
 
