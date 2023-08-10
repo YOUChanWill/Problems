@@ -1,5 +1,8 @@
 package day1;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 public class Solution {
 
 
@@ -24,6 +27,64 @@ public class Solution {
         return slow;
     }
 
+    /**给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。**/
+    public int trap(int[] height) {
+        int ans = 0;
+        int left = 0, right = height.length - 1, leftMax = 0, rightMax = 0;
+        while (left < right){
+            leftMax = Math.max(leftMax,height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if (height[left] < height[right]){
+                ans += leftMax - height[left];
+                ++left;
+            }else {
+                ans += rightMax - height[right];
+                --right;
+            }
+        }
+        return ans;
+    }
+
+
+    /**给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+     请你设计并实现时间复杂度为 O(n) 的算法解决此问题。**/
+    public int longestConsecutive(int[] nums) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int x :
+                nums) {
+            set.add(x);
+        }
+        int max = 0;
+        for (int x :
+                set) {
+            if (!set.contains(x - 1)) {
+                int currenNum = x;
+                int currenMax = 1;
+                while (set.contains(currenNum + 1)) {
+                    currenNum += 1;
+                    currenMax += 1;
+                }
+                max = Math.max(max, currenMax);
+            }
+        }
+        return max;
+    }
+
+    public int longestConsecutive01(int[] nums) {
+        Arrays.sort(nums);
+        int n=1,max=0;
+        for(int i=0;i<nums.length;i++){
+            if(i+1<nums.length && nums[i]+1==nums[i+1]){
+                n++;
+            }else if(i+1<nums.length && nums[i]==nums[i+1]){
+                continue;
+            }else{
+                if(n>max)max=n;n=1;
+            }
+        }
+        return max;
+    }
 
 
 
