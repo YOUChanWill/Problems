@@ -42,4 +42,101 @@ public class Solution {
         grid[y][x] = 0;  //dfs遍历完该位置为起始位置的情况后，置零，以不影响后面的dfs
         return res;
     }
+
+
+     /**给你一个 n x n 整数矩阵 grid ，请你返回 非零偏移下降路径 数字和的最小值。
+
+      非零偏移下降路径 定义为：从 grid 数组中的每一行选择一个数字，且按顺序选出来的数字中，相邻数字不在原数组的同一列。**/
+    public int minFallingPathSum(int[][] grid) {
+        int n = grid.length;
+        int[][] d = new int[n][n];
+        // 令状态 f[i][j] 表示从数组 grid 的前 i 行中的每一行选择一个数字，
+        // 并且第 i 行选择的数字为 grid[i][j] 时，可以得到的路径和最小值
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                d[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            d[0][i] = grid[0][i];
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    if (j == k) {
+                        continue;
+                    }
+                    d[i][j] = Math.min(d[i][j], d[i - 1][k] + grid[i][j]);
+                }
+            }
+        }
+        int res = Integer.MAX_VALUE;
+        for (int j = 0; j < n; j++) {
+            res = Math.min(res, d[n - 1][j]);
+        }
+        return res;
+    }
+
+    public int minFallingPathSum01(int[][] grid) {
+        int n = grid.length;
+        int first_min_sum = 0;
+        int second_min_sum = 0;
+        int first_min_index = -1;
+
+        for (int i = 0; i < n; i++) {
+            int cur_first_min_sum = Integer.MAX_VALUE;
+            int cur_second_min_sum = Integer.MAX_VALUE;
+            int cur_first_min_index = -1;
+
+            for (int j = 0; j < n; j++) {
+                int cur_sum = (j != first_min_index ? first_min_sum : second_min_sum) + grid[i][j];
+                if (cur_sum < cur_first_min_sum) {
+                    cur_second_min_sum = cur_first_min_sum;
+                    cur_first_min_sum = cur_sum;
+                    cur_first_min_index = j;
+                } else if (cur_sum < cur_second_min_sum) {
+                    cur_second_min_sum = cur_sum;
+                }
+            }
+            first_min_sum = cur_first_min_sum;
+            second_min_sum = cur_second_min_sum;
+            first_min_index = cur_first_min_index;
+        }
+        return first_min_sum;
+    }
+
+    public int minFallingPathSum02(int[][] grid) {
+
+        int n = grid.length;
+        int minSum1 = 0, minSum2 = 0, lastMinSumCol = -1;
+        for(int i = 0; i < n; ++i){
+
+            int curMinSum1 = Integer.MAX_VALUE, curMinSum2 = Integer.MAX_VALUE, curMinSumCol = -1;
+
+            for(int j = 0; j < n; ++j){
+                int curMinSum =(j == lastMinSumCol? minSum2:minSum1) + grid[i][j];
+
+                if(curMinSum < curMinSum1){
+                    curMinSum2 = curMinSum1;
+                    curMinSum1 = curMinSum;
+                    curMinSumCol = j;
+                }else if(curMinSum < curMinSum2)
+                    curMinSum2 = curMinSum;
+
+
+            }
+            minSum1 = curMinSum1;
+            minSum2 = curMinSum2;
+            lastMinSumCol = curMinSumCol;
+
+        }
+        return minSum1;
+    }
+
+
+
+
+
+
+
 }
