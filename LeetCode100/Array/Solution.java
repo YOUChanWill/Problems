@@ -1,8 +1,10 @@
 package Array;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Solution {
 
@@ -124,6 +126,145 @@ public class Solution {
         return n + 1;
     }
 
+
+
+    /**给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。**/
+    public List<Integer> spiralOrder(int[][] mat) {
+        int INF = 101;
+        List<Integer> ans = new ArrayList<>();
+        int m = mat.length, n = mat[0].length;
+        // 定义四个方向
+        int[][] dirs = new int[][]{{0,1},{1,0},{0,-1},{-1,0}};
+        for (int x = 0, y = 0, d = 0, i = 0; i < m * n; i++) {
+            ans.add(mat[x][y]);
+            mat[x][y] = INF;
+            // 下一步要到达的位置
+            int nx = x + dirs[d][0], ny = y + dirs[d][1];
+            // 如果下一步发生「溢出」或者已经访问过（说明四个方向已经走过一次）
+            if (nx < 0 || nx >= m || ny < 0 || ny >= n || mat[nx][ny] == INF) {
+                d = (d + 1) % 4;
+                nx = x + dirs[d][0]; ny = y + dirs[d][1];
+            }
+            x = nx; y = ny;
+        }
+        return ans;
+    }
+
+    public List<Integer> spiralOrder01(int[][] mat) {
+        List<Integer> ans = new ArrayList<>();
+        int m = mat.length, n = mat[0].length;
+        circle(mat, 0, 0, m - 1, n - 1, ans);
+        return ans;
+    }
+    // 遍历 以 (x1, y1) 作为左上角，(x2, y2) 作为右下角形成的「圈」
+    void circle(int[][] mat, int x1, int y1, int x2, int y2, List<Integer> ans) {
+        if (x2 < x1 || y2 < y1) return;
+        // 只有一行时，按「行」遍历
+        if (x1 == x2) {
+            for (int i = y1; i <= y2; i++) ans.add(mat[x1][i]);
+            return;
+        }
+        // 只有一列时，按「列」遍历
+        if (y1 == y2) {
+            for (int i = x1; i <= x2; i++) ans.add(mat[i][y2]);
+            return;
+        }
+        // 遍历当前「圈」
+        for (int i = y1; i < y2; i++) ans.add(mat[x1][i]);
+        for (int i = x1; i < x2; i++) ans.add(mat[i][y2]);
+        for (int i = y2; i > y1; i--) ans.add(mat[x2][i]);
+        for (int i = x2; i > x1; i--) ans.add(mat[i][y1]);
+        // 往里收一圈，继续遍历
+        circle(mat, x1 + 1, y1 + 1, x2 - 1, y2 - 1, ans);
+    }
+
+    /**给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+
+     你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。**/
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        int[][] matrix_new = new int[n][n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                matrix_new[j][n - i - 1] = matrix[i][j];
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                matrix[i][j] = matrix_new[i][j];
+            }
+        }
+    }
+
+    public void rotate01(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; ++i) {
+            for (int j = 0; j < (n + 1) / 2; ++j) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - j - 1][i];
+                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = temp;
+            }
+        }
+    }
+
+    public void rotate02(int[][] matrix) {
+        int n = matrix.length;
+        // 水平翻转
+        for (int i = 0; i < n / 2; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - i - 1][j];
+                matrix[n - i - 1][j] = temp;
+            }
+        }
+        // 主对角线翻转
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+    }
+
+    /**编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+
+     每行的元素从左到右升序排列。
+     每列的元素从上到下升序排列。**/
+    public boolean searchMatrix(int[][] matrix, int target) {
+        for (int[] row : matrix) {
+            for (int x : row) {
+                if (target == x) return true;
+            }
+        }
+        return false;
+    }
+
+    /**从矩阵 matrix 的右上角 (0,n−1) 进行搜索。
+     * 在每一步的搜索过程中，如果我们位于位置 (x,y)，
+     * 那么我们希望在以 matrix 的左下角为左下角、以 (x,y) 为右上角的矩阵中进行搜索，
+     * 即行的范围为 [x,m−1]，列的范围为 [0,y]：
+     **/
+    public boolean searchMatrix01(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) {
+            return false;
+        }
+        int m = matrix.length, n = matrix[0].length;
+        int r = m - 1, c = 0;
+        while (r >= 0 && c < n) {
+            int val = matrix[r][c];
+            if (val == target) {
+                return true;
+            } else if (val > target) {
+                r--;
+            } else {
+                c++;
+            }
+        }
+        return false;
+    }
 
 
 
