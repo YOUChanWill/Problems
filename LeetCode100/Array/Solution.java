@@ -1,4 +1,5 @@
-package day2;
+package Array;
 
 public class Solution {
+
 }
