@@ -1,6 +1,8 @@
 package LinkedList;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class solution {
@@ -11,6 +13,18 @@ public class solution {
         ListNode() {}
         ListNode(int x) {val = x;next = null;}
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
+
+    class Node {
+        int val;
+        Node next;
+        Node random;
+
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
     }
 
 
@@ -52,7 +66,72 @@ public class solution {
 
     /**给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。**/
     public boolean isPalindrome(ListNode head) {
+        List<Integer> vals = new ArrayList<Integer>();
 
+        // 将链表的值复制到数组中
+        ListNode currentNode = head;
+        while (currentNode != null) {
+            vals.add(currentNode.val);
+            currentNode = currentNode.next;
+        }
+        // 使用双指针判断是否回文
+        int front = 0;
+        int back = vals.size() - 1;
+        while (front < back) {
+            if (!vals.get(front).equals(vals.get(back))) {
+                return false;
+            }
+            front++;
+            back--;
+        }
+        return true;
+    }
+
+    public boolean isPalindrome01(ListNode head) {
+        if (head == null) {
+            return true;
+        }
+        // 找到前半部分链表的尾节点并反转后半部分链表
+        ListNode firstHalfEnd = endOfFirstHalf(head);
+        ListNode secondHalfStart = reverseList(firstHalfEnd.next);
+
+        // 判断是否回文
+        ListNode p1 = head;
+        ListNode p2 = secondHalfStart;
+        boolean result = true;
+        while (result && p2 != null) {
+            if (p1.val != p2.val) {
+                result = false;
+            }
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+
+        // 还原链表并返回结果
+        firstHalfEnd.next = reverseList(secondHalfStart);
+        return result;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+
+    private ListNode endOfFirstHalf(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
     }
 
 
@@ -65,7 +144,42 @@ public class solution {
      如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
      不允许修改 链表。**/
     public ListNode detectCycle(ListNode head) {
+        // 遍历链表中的每个节点，并将它记录下来；一旦遇到了此前遍历过的节点，就可以判定链表中存在环。借助哈希表可以很方便地实现。
+        ListNode pos = head;
+        Set<ListNode> visited = new HashSet<ListNode>();
+        while (pos != null) {
+            if (visited.contains(pos)) {
+                return pos;
+            } else {
+                visited.add(pos);
+            }
+            pos = pos.next;
+        }
+        return null;
+    }
 
+    public ListNode detectCycle01(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode slow = head, fast = head;
+        while (fast != null) {
+            slow = slow.next;
+            if (fast.next != null) {
+                fast = fast.next.next;
+            } else {
+                return null;
+            }
+            if (fast == slow) {
+                ListNode ptr = head;
+                while (ptr != slow) {
+                    ptr = ptr.next;
+                    slow = slow.next;
+                }
+                return ptr;
+            }
+        }
+        return null;
     }
 
 
@@ -77,6 +191,43 @@ public class solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
     }
+
+
+    /**给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
+
+     k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+     你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。**/
+    public ListNode reverseKGroup(ListNode head, int k) {
+
+    }
+
+
+    /**给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。**/
+    public ListNode sortList(ListNode head) {
+
+    }
+
+
+    /**给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
+
+     构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。
+
+     例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --> Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --> y 。
+
+     返回复制链表的头节点。
+
+     用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
+
+     val：一个表示 Node.val 的整数。
+     random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
+     你的代码 只 接受原链表的头节点 head 作为传入参数。**/
+    public Node copyRandomList(Node head) {
+
+    }
+
+
+
 
 
 
