@@ -1,8 +1,6 @@
 package Week;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Solution {
 
@@ -47,4 +45,84 @@ public class Solution {
         }
         return false;
     }
+
+
+    /**给你一个下标从 0 开始的整数数组 nums 。请你从 nums 中找出和 最大 的一对数，且这两个数数位上最大的数字相等。
+
+     返回最大和，如果不存在满足题意的数字对，返回 -1 。**/
+    public int maxSum(int[] nums) {
+        Map<Integer, Integer> maxDigitSums = new HashMap<>();
+        int maxSum = -1;
+
+        for (int num : nums) {
+            int maxDigit = getMaxDigit(num);
+            if (maxDigitSums.containsKey(maxDigit)) {
+                int currentSum = maxDigitSums.get(maxDigit);
+                maxSum = Math.max(maxSum, currentSum + num);
+                maxDigitSums.put(maxDigit, Math.max(currentSum, num));
+            } else {
+                maxDigitSums.put(maxDigit, num);
+            }
+        }
+
+        return maxSum;
+    }
+
+    public static int getMaxDigit(int num) {
+        int maxDigit = 0;
+        while (num > 0) {
+            maxDigit = Math.max(maxDigit, num % 10);
+            num /= 10;
+        }
+        return maxDigit;
+    }
+
+
+
+
+    /**给你一个下标从 0 开始的整数数组 nums 和一个整数 x 。
+
+     请你找到数组中下标距离至少为 x 的两个元素的 差值绝对值 的 最小值 。
+
+     换言之，请你找到两个下标 i 和 j ，满足 abs(i - j) >= x 且 abs(nums[i] - nums[j]) 的值最小。
+
+     请你返回一个整数，表示下标距离至少为 x 的两个元素之间的差值绝对值的 最小值 。**/
+    public int minAbsoluteDifference(List<Integer> nums, int x) {
+        int n = nums.size();
+        int minAbsDiff = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + x; j < n; j++) {
+                minAbsDiff = Math.min(minAbsDiff, Math.abs(nums.get(i) - nums.get(j)));
+            }
+        }
+        return minAbsDiff;
+    }
+
+    public int minAbsoluteDifference01(List<Integer> nums, int x) {
+        int n = nums.size();
+        int minAns = Integer.MAX_VALUE;
+
+        // 存入当前 nums[0, i-x] 的元素
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        for (int i = x; i < n; i++) {
+            int pre = nums.get(i - x);
+            treeSet.add(pre);
+
+            int k = nums.get(i);
+            Integer ceiling = treeSet.ceiling(k);
+            if (null != ceiling) {
+                minAns = Math.min(minAns, Math.abs(ceiling - k));
+            }
+
+            Integer floor = treeSet.floor(k);
+            if (null != floor) {
+                minAns = Math.min(minAns, Math.abs(floor - k));
+            }
+        }
+        return minAns;
+    }
+
+
+
 }
