@@ -1,9 +1,6 @@
 package LinkedList;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class solution {
     class ListNode {
@@ -280,8 +277,103 @@ public class solution {
 
     /**给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。**/
     public ListNode sortList(ListNode head) {
-
+        if (head == null) {
+            return head;
+        }
+        int length = 0;
+        ListNode node = head;
+        while (node != null) {
+            length++;
+            node = node.next;
+        }
+        ListNode dummyHead = new ListNode(0, head);
+        for (int subLength = 1; subLength < length; subLength <<= 1) {
+            ListNode prev = dummyHead, curr = dummyHead.next;
+            while (curr != null) {
+                ListNode head1 = curr;
+                for (int i = 1; i < subLength && curr.next != null; i++) {
+                    curr = curr.next;
+                }
+                ListNode head2 = curr.next;
+                curr.next = null;
+                curr = head2;
+                for (int i = 1; i < subLength && curr != null && curr.next != null; i++) {
+                    curr = curr.next;
+                }
+                ListNode next = null;
+                if (curr != null) {
+                    next = curr.next;
+                    curr.next = null;
+                }
+                ListNode merged = merge(head1, head2);
+                prev.next = merged;
+                while (prev.next != null) {
+                    prev = prev.next;
+                }
+                curr = next;
+            }
+        }
+        return dummyHead.next;
     }
+
+    public ListNode merge(ListNode head1, ListNode head2) {
+        ListNode dummyHead = new ListNode(0);
+        ListNode temp = dummyHead, temp1 = head1, temp2 = head2;
+        while (temp1 != null && temp2 != null) {
+            if (temp1.val <= temp2.val) {
+                temp.next = temp1;
+                temp1 = temp1.next;
+            } else {
+                temp.next = temp2;
+                temp2 = temp2.next;
+            }
+            temp = temp.next;
+        }
+        if (temp1 != null) {
+            temp.next = temp1;
+        } else if (temp2 != null) {
+            temp.next = temp2;
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode sortList01(ListNode head) {
+        if(head == null){
+            return head;
+        }
+
+        int min = head.val;
+        int max = head.val;
+        ListNode node = head.next;
+        while(node != null){
+            if(node.val > max){
+                max = node.val;
+            }
+            if(node.val < min){
+                min = node.val;
+            }
+            node = node.next;
+        }
+
+        int []count = new int[max - min + 1];
+        node = head;
+        while (node!=null){
+            count[node.val-min]++;
+            node = node.next;
+        }
+
+        node = head;
+        max -= min;
+        for(int i = 0;i<=max;i++){
+            while(count[i] >0){
+                node.val = min+i;
+                node = node.next;
+                count[i]--;
+            }
+        }
+        return head;
+    }
+
 
 
     /**给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
@@ -298,11 +390,67 @@ public class solution {
      random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
      你的代码 只 接受原链表的头节点 head 作为传入参数。**/
     public Node copyRandomList(Node head) {
+        if(head == null){
+            return null;
+        }
+        Node cur = head;
+        HashMap<Node,Node> map = new HashMap<>();
+        while(cur!=null){
+            map.put(cur,new Node(cur.val));
+            cur = cur.next;
+        }
+        cur=head;
+        while(cur!=null){
+            map.get(cur).next=map.get(cur.next);
+            map.get(cur).random=map.get(cur.random);
+            cur=cur.next;
+        }
+        return map.get(head);
+    }
 
+    public Node copyRandomList01(Node head) {
+        if (head == null) {
+            return null;
+        }
+        for (Node node = head; node != null; node = node.next.next) {
+            Node nodeNew = new Node(node.val);
+            nodeNew.next = node.next;
+            node.next = nodeNew;
+        }
+        for (Node node = head; node != null; node = node.next.next) {
+            Node nodeNew = node.next;
+            nodeNew.random = (node.random != null) ? node.random.next : null;
+        }
+        Node headNew = head.next;
+        for (Node node = head; node != null; node = node.next) {
+            Node nodeNew = node.next;
+            node.next = node.next.next;
+            nodeNew.next = (nodeNew.next != null) ? nodeNew.next.next : null;
+        }
+        return headNew;
     }
 
 
+    /**请你设计并实现一个满足  LRU (最近最少使用) 缓存 约束的数据结构。
+     实现 LRUCache 类：
+     LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
+     int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+     void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+     函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。**/
+    class LRUCache {
 
+        public LRUCache(int capacity) {
+
+        }
+
+        public int get(int key) {
+
+        }
+
+        public void put(int key, int value) {
+
+        }
+    }
 
 
 
