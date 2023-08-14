@@ -1,5 +1,7 @@
 package Tree;
 
+import java.util.*;
+
 public class Solution {
 
      class TreeNode {
@@ -59,6 +61,98 @@ public class Solution {
 
     /**给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。**/
     public int kthSmallest(TreeNode root, int k) {
+        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            --k;
+            if (k == 0) {
+                break;
+            }
+            root = root.right;
+        }
+        return root.val;
+    }
+
+
+    /**给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。**/
+    public List<Integer> rightSideView(TreeNode root) {
+        Map<Integer, Integer> rightmostValueAtDepth = new HashMap<Integer, Integer>();
+        int max_depth = -1;
+
+        Queue<TreeNode> nodeQueue = new LinkedList<TreeNode>();
+        Queue<Integer> depthQueue = new LinkedList<Integer>();
+        nodeQueue.add(root);
+        depthQueue.add(0);
+
+        while (!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+            int depth = depthQueue.remove();
+
+            if (node != null) {
+                // 维护二叉树的最大深度
+                max_depth = Math.max(max_depth, depth);
+
+                // 由于每一层最后一个访问到的节点才是我们要的答案，因此不断更新对应深度的信息即可
+                rightmostValueAtDepth.put(depth, node.val);
+
+                nodeQueue.add(node.left);
+                nodeQueue.add(node.right);
+                depthQueue.add(depth + 1);
+                depthQueue.add(depth + 1);
+            }
+        }
+
+        List<Integer> rightView = new ArrayList<Integer>();
+        for (int depth = 0; depth <= max_depth; depth++) {
+            rightView.add(rightmostValueAtDepth.get(depth));
+        }
+
+        return rightView;
+    }
+
+
+    public List<Integer> rightSideView01(TreeNode root) {
+        Map<Integer, Integer> rightmostValueAtDepth = new HashMap<Integer, Integer>();
+        int max_depth = -1;
+
+        Deque<TreeNode> nodeStack = new LinkedList<TreeNode>();
+        Deque<Integer> depthStack = new LinkedList<Integer>();
+        nodeStack.push(root);
+        depthStack.push(0);
+
+        while (!nodeStack.isEmpty()) {
+            TreeNode node = nodeStack.pop();
+            int depth = depthStack.pop();
+
+            if (node != null) {
+                // 维护二叉树的最大深度
+                max_depth = Math.max(max_depth, depth);
+
+                // 如果不存在对应深度的节点我们才插入
+                if (!rightmostValueAtDepth.containsKey(depth)) {
+                    rightmostValueAtDepth.put(depth, node.val);
+                }
+
+                nodeStack.push(node.left);
+                nodeStack.push(node.right);
+                depthStack.push(depth + 1);
+                depthStack.push(depth + 1);
+            }
+        }
+
+        List<Integer> rightView = new ArrayList<Integer>();
+        for (int depth = 0; depth <= max_depth; depth++) {
+            rightView.add(rightmostValueAtDepth.get(depth));
+        }
+
+        return rightView;
+    }
+
+    public void flatten(TreeNode root) {
 
     }
 
