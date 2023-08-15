@@ -13,41 +13,6 @@ public class Solution {
 
      此外，你可以假设该网格的四条边均被水包围。**/
     public int numIslands(char[][] grid) {
-        int res = 0;
-        for (int r = 0; r < grid.length; r++) {
-            for (int c = 0; c < grid[0].length; c++) {
-                if (grid[r][c] == 1) {
-                    int a = area(grid, r, c);
-                    res = Math.max(res, a);
-                }
-            }
-        }
-        return res;
-    }
-
-    int area(int[][] grid, int r, int c) {
-        if (!inArea(grid, r, c)) {
-            return 0;
-        }
-        if (grid[r][c] != 1) {
-            return 0;
-        }
-        grid[r][c] = 2;
-
-        return 1
-                + area(grid, r - 1, c)
-                + area(grid, r + 1, c)
-                + area(grid, r, c - 1)
-                + area(grid, r, c + 1);
-    }
-
-    boolean inArea(int[][] grid, int r, int c) {
-        return 0 <= r && r < grid.length
-                && 0 <= c && c < grid[0].length;
-    }
-
-
-    public int numIslands01(char[][] grid) {
         if (grid == null || grid.length == 0) {
             return 0;
         }
