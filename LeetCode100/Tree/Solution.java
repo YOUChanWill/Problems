@@ -265,5 +265,81 @@ public class Solution {
     }
 
 
+    /**给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+
+     路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。**/
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> prefix = new HashMap<Long, Integer>();
+        prefix.put(0L, 1);
+        return dfs(root, prefix, 0, targetSum);
+    }
+
+    public int dfs(TreeNode root, Map<Long, Integer> prefix, long curr, int targetSum) {
+        if (root == null) {
+            return 0;
+        }
+
+        int ret = 0;
+        curr += root.val;
+
+        ret = prefix.getOrDefault(curr - targetSum, 0);
+        prefix.put(curr, prefix.getOrDefault(curr, 0) + 1);
+        ret += dfs(root.left, prefix, curr, targetSum);
+        ret += dfs(root.right, prefix, curr, targetSum);
+        prefix.put(curr, prefix.getOrDefault(curr, 0) - 1);
+
+        return ret;
+    }
+
+    // 输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+    // 输出：3
+    // 思路：二叉树前缀和，Map<前缀和,出现次数>，初始加入(0,1)
+    //      等于targetSum次数 = 当前节点为末尾次数
+    //          + 左节点为末尾次数 + 右节点为末尾次数
+    public int pathSum01(TreeNode root, int targetSum) {
+        if (root == null) return 0;
+        Map<Long, Integer> prefixSumMap = new HashMap<>();
+        prefixSumMap.put(0l, 1);
+        return dfs1(root, prefixSumMap, 0, targetSum);
+    }
+
+    private int dfs1(TreeNode root, Map<Long,Integer> map, long pre, int targetSum) {
+        if (root == null) return 0;
+        long prefix = pre+root.val;
+        int cnt = map.getOrDefault(prefix-targetSum,0);
+        map.put(prefix, map.getOrDefault(prefix,0)+1);
+        cnt += dfs1(root.left, map, prefix, targetSum);
+        cnt += dfs1(root.right, map, prefix, targetSum);
+        map.put(prefix, map.get(prefix)-1);
+        return cnt;
+    }
+
+
+
+    /**给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+     百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，
+     满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”**/
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 当 left 和 right 同时为空 ：说明 root 的左 / 右子树中都不包含 p,q ，返回 null ；
+        //当 left 和 right 同时不为空 ：说明 p,q 分列在 root 的 异侧 （分别在 左 / 右子树），因此 root 为最近公共祖先，返回 root ；
+        //当 left 为空 ，right 不为空 ：p,qp,qp,q 都不在 rootrootroot 的左子树中，直接返回 right 。具体可分为两种情况：
+        //p,q 其中一个在 root 的 右子树 中，此时 right 指向 p（假设为 p ）；
+        //p,q 两节点都在 root 的 右子树 中，此时的 right 指向 最近公共祖先节点 ；
+        //当 left 不为空 ， right 为空 ：与情况 3. 同理；
+        if(root == null || root == p || root == q) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left == null) return right;
+        if(right == null) return left;
+        return root;
+    }
+
+
+    public int maxPathSum(TreeNode root) {
+
+    }
+
+
 
 }
