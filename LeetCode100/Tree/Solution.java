@@ -211,4 +211,59 @@ public class Solution {
         flatten(temp);
     }
 
+
+    /**给定两个整数数组 preorder 和 inorder ，
+     * 其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。**/
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || preorder.length == 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[0]);
+        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+        stack.push(root);
+        int inorderIndex = 0;
+        for (int i = 1; i < preorder.length; i++) {
+            int preorderVal = preorder[i];
+            TreeNode node = stack.peek();
+            if (node.val != inorder[inorderIndex]) {
+                node.left = new TreeNode(preorderVal);
+                stack.push(node.left);
+            } else {
+                while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
+                    node = stack.pop();
+                    inorderIndex++;
+                }
+                node.right = new TreeNode(preorderVal);
+                stack.push(node.right);
+            }
+        }
+        return root;
+    }
+
+    public TreeNode buildTree01(int[] preorder, int[] inorder) {
+        return process(preorder,inorder,0,preorder.length-1,0,inorder.length-1);
+
+    }
+
+    public TreeNode process(int[] preorder,int[] inorder,int preStart,int preEnd,int inStart,int inEnd){
+        if(preStart>preEnd){
+            return null;
+        }
+        if(preStart==preEnd){
+            return new TreeNode(preorder[preStart]);
+        }
+
+        TreeNode node=new TreeNode(preorder[preStart]);
+        int i=inStart;
+
+        while(i<=inEnd&&inorder[i]!=node.val){
+            i++;
+        }
+        node.left=process(preorder,inorder,preStart+1,preStart+i-inStart,inStart,i-1);
+        node.right=process(preorder,inorder,preStart+i-inStart+1,preEnd,i+1,inEnd);
+        return node;
+    }
+
+
+
 }
