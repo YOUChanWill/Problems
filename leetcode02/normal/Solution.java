@@ -1,8 +1,7 @@
 package normal;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Solution {
 
@@ -129,6 +128,69 @@ public class Solution {
     }
 
 
+    /**你会得到一个字符串 s (索引从 0 开始)，你必须对它执行 k 个替换操作。
+     * 替换操作以三个长度均为 k 的并行数组给出：indices, sources,  targets。
+
+     要完成第 i 个替换操作:
+
+     检查 子字符串  sources[i] 是否出现在 原字符串 s 的索引 indices[i] 处。
+     如果没有出现， 什么也不做 。
+     如果出现，则用 targets[i] 替换 该子字符串。
+     例如，如果 s = "abcd" ， indices[i] = 0 , sources[i] = "ab"， targets[i] = "eee" ，那么替换的结果将是 "eeecd" 。
+
+     所有替换操作必须 同时 发生，这意味着替换操作不应该影响彼此的索引。测试用例保证元素间不会重叠 。
+
+     例如，一个 s = "abc" ，  indices = [0,1] ， sources = ["ab"，"bc"] 的测试用例将不会生成，因为 "ab" 和 "bc" 替换重叠。
+     在对 s 执行所有替换操作后返回 结果字符串 。
+
+     子字符串 是字符串中连续的字符序列。**/
+    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+        // 设 s 长度为 n，创建一个长为 n 的 replace 列表。
+        // 遍历每个替换操作。对于第 i 个替换操作，如果从 indices[i] 开始的字符串有前缀 sources[i]，则可以替换成 target[i]。
+        // 此时记录 replace[indices[i]]=(target[i],len(sources[i]))，表示替换后的字符串，以及被替换的长度。
+        // 初始化 i=0，如果 replace[i] 是空的，那么无需替换，把 s[i] 加入答案，然后 i 加一；
+        // 如果 replace[i] 不为空，那么把 replace[i][0] 加入答案，然后 i 增加 replace[i][1]。循环直到 i=n 为止。
+        int n = s.length();
+        String[] replaceStr = new String[n]; // 替换后的字符串
+        int[] replaceLen = new int[n];    // 被替换的长度
+        Arrays.fill(replaceLen, 1);     // 无需替换时 i+=1
+        for (int i = 0; i < indices.length; i++) {
+            int idx = indices[i];
+            if (s.startsWith(sources[i], idx)) {
+                replaceStr[idx] = targets[i];
+                replaceLen[idx] = sources[i].length();
+            }
+        }
+
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < n; i += replaceLen[i]) { // 无需替换时 i+=1
+            if (replaceStr[i] == null) {
+                ans.append(s.charAt(i));
+            } else {
+                ans.append(replaceStr[i]);
+            }
+        }
+        return ans.toString();
+    }
+
+    public String findReplaceString01(String s, int[] indices, String[] sources, String[] targets) {
+        int[] order = IntStream.range(0, indices.length).boxed().sorted(Comparator.comparingInt(i -> indices[i]))
+                .mapToInt(i -> i).toArray();
+        StringBuilder sb = new StringBuilder();
+        int preIndex = 0;
+        for (int i : order) {
+            int index = indices[i];
+            sb.append(s, preIndex, index);
+            if (s.startsWith(sources[i], index)) {
+                sb.append(targets[i]);
+                preIndex = index + sources[i].length();
+            } else {
+                preIndex = index;
+            }
+        }
+        sb.append(s.substring(preIndex));
+        return sb.toString();
+    }
 
 
 
