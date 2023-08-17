@@ -194,6 +194,45 @@ public class Solution {
 
 
 
+    /**给你一个 rows x cols 大小的矩形披萨和一个整数 k ，矩形包含两种字符： 'A' （表示苹果）和 '.' （表示空白格子）。你需要切披萨 k-1 次，得到 k 块披萨并送给别人。
+
+     切披萨的每一刀，先要选择是向垂直还是水平方向切，再在矩形的边界上选一个切的位置，将披萨一分为二。如果垂直地切披萨，那么需要把左边的部分送给一个人，如果水平地切，那么需要把上面的部分送给一个人。在切完最后一刀后，需要把剩下来的一块送给最后一个人。
+
+     请你返回确保每一块披萨包含 至少 一个苹果的切披萨方案数。由于答案可能是个很大的数字，请你返回它对 10^9 + 7 取余的结果。**/
+    public int ways(String[] pizza, int k) {
+        final int MOD = (int) 1e9 + 7;
+        int m = pizza.length, n = pizza[0].length();
+        int[][] sum = new int[m + 1][n + 1]; // 二维后缀和
+        int[][] f = new int[m + 1][n + 1];
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                sum[i][j] = sum[i][j + 1] + sum[i + 1][j] - sum[i + 1][j + 1] + (pizza[i].charAt(j) & 1);
+                if (sum[i][j] > 0) f[i][j] = 1; // 初始值
+            }
+        }
+
+        while (--k > 0) {
+            int[] colS = new int[n]; // colS[j] 表示 f 第 j 列的后缀和
+            for (int i = m - 1; i >= 0; i--) {
+                int rowS = 0; // f[i] 的后缀和
+                for (int j = n - 1; j >= 0; j--) {
+                    int tmp = f[i][j];
+                    if (sum[i][j] == sum[i][j + 1]) // 左边界没有苹果
+                        f[i][j] = f[i][j + 1];
+                    else if (sum[i][j] == sum[i + 1][j]) // 上边界没有苹果
+                        f[i][j] = f[i + 1][j];
+                    else // 左边界上边界都有苹果，那么无论怎么切都有苹果
+                        f[i][j] = (rowS + colS[j]) % MOD;
+                    rowS = (rowS + tmp) % MOD;
+                    colS[j] = (colS[j] + tmp) % MOD;
+                }
+            }
+        }
+        return f[0][0];
+    }
+
+
+
 
 
 
