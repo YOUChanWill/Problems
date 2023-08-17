@@ -125,7 +125,17 @@ public class Solution {
 
      你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。**/
     public int findMin(int[] nums) {
-
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            } else {
+                low = pivot + 1;
+            }
+        }
+        return nums[low];
     }
 
 
