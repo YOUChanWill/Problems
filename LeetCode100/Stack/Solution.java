@@ -1,5 +1,6 @@
 package Stack;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -122,9 +123,51 @@ public class Solution {
     }
 
 
+    /**给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，
+     * 其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。*/
     public int[] dailyTemperatures(int[] temperatures) {
+        int length = temperatures.length;
+        int[] ans = new int[length];
+        Deque<Integer> stack = new LinkedList<Integer>();
+        for (int i = 0; i < length; i++) {
+            int temperature = temperatures[i];
+            while (!stack.isEmpty() && temperature > temperatures[stack.peek()]) {
+                int prevIndex = stack.pop();
+                ans[prevIndex] = i - prevIndex;
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+
+    public int[] dailyTemperatures01(int[] temperatures) {
+        int length = temperatures.length;
+        int[] ans = new int[length];
+        int[] next = new int[101];
+        Arrays.fill(next, Integer.MAX_VALUE);
+        for (int i = length - 1; i >= 0; --i) {
+            int warmerIndex = Integer.MAX_VALUE;
+            for (int t = temperatures[i] + 1; t <= 100; ++t) {
+                if (next[t] < warmerIndex) {
+                    warmerIndex = next[t];
+                }
+            }
+            if (warmerIndex < Integer.MAX_VALUE) {
+                ans[i] = warmerIndex - i;
+            }
+            next[temperatures[i]] = i;
+        }
+        return ans;
+    }
+
+
+    /**给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+
+     求在该柱状图中，能够勾勒出来的矩形的最大面积。*/
+    public int largestRectangleArea(int[] heights) {
 
     }
+
 
 
 
