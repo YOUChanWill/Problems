@@ -8,9 +8,15 @@ public class Solution {
 
      判断你是否能够到达最后一个下标，如果可以，返回 true ；否则，返回 false 。*/
     public boolean canJump(int[] nums) {
-
+        int n = nums.length, rightmost = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i <= rightmost){
+                rightmost = Math.max(rightmost,i + nums[i]);
+                if (rightmost >= n - 1) return true;
+            }
+        }
+        return false;
     }
-
 
 
     /**给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
