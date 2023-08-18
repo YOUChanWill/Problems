@@ -27,7 +27,20 @@ public class Solution {
      i + j < n
      返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。*/
     public int jump(int[] nums) {
-
+        int length = nums.length;
+        int end = 0;
+        int maxPosition = 0;
+        int steps = 0;
+        for (int i = 0; i < length - 1; i++) {
+            maxPosition = Math.max(maxPosition, i + nums[i]);
+            if (i == end) {
+                // 目前能跳到的最远位置变成了下次起跳位置的有边界
+                end = maxPosition;
+                // 进入下一次跳跃
+                steps++;
+            }
+        }
+        return steps;
     }
 
 
