@@ -1,9 +1,6 @@
 package Stack;
 
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 public class Solution {
 
@@ -165,11 +162,53 @@ public class Solution {
 
      求在该柱状图中，能够勾勒出来的矩形的最大面积。*/
     public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        Arrays.fill(right, n);
 
+        // 在一维数组中对每一个数找到第一个比自己小的元素。这类“在一维数组中找第一个满足某种条件的数”的场景就是典型的单调栈应用场景。
+        Deque<Integer> mono_stack = new ArrayDeque<Integer>();
+        for (int i = 0; i < n; ++i) {
+            while (!mono_stack.isEmpty() && heights[mono_stack.peek()] >= heights[i]) {
+                right[mono_stack.peek()] = i;
+                mono_stack.pop();
+            }
+            left[i] = (mono_stack.isEmpty() ? -1 : mono_stack.peek());
+            mono_stack.push(i);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            ans = Math.max(ans, (right[i] - left[i] - 1) * heights[i]);
+        }
+        return ans;
     }
 
 
-
-
+    public static int largestRectangleArea01(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+        int[] stack = new int[height.length];
+        int maxArea = Integer.MIN_VALUE;
+        int si = -1;
+        for (int i = 0; i < height.length; i++) {
+            while(si != -1 && height[stack[si]] >= height[i]) {
+                int j = stack[si--];
+                int left = si == -1 ? -1 : stack[si];
+                int ans = (i - left -1) * height[j];
+                maxArea = Math.max(maxArea, ans);
+            }
+            stack[++si] = i;
+        }
+        while(si != -1 ) {
+            int j = stack[si--];
+            int left = si == -1 ? -1 : stack[si];
+            int ans = (height.length - left -1) * height[j];
+            maxArea = Math.max(maxArea, ans);
+        }
+        return maxArea;
+    }
 
 }
