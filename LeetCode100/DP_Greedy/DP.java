@@ -1,5 +1,7 @@
 package DP_Greedy;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class DP {
@@ -9,9 +11,29 @@ public class DP {
      完全平方数 是一个整数，其值等于另一个整数的平方；
      换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。**/
     public int numSquares(int n) {
-
+        int[] ans = new int[n + 1];
+        Arrays.fill(ans,0x3f3f3f3f);
+        ans[0] = 0;
+        for (int i = 1; i * i <= n; i++) {
+            int x = i * i;
+            for (int j = x; j <= n ; j++) {
+                ans[j] = Math.min(ans[j],ans[j - x] + 1);
+            }
+        }
+        return ans[n];
     }
 
+    static HashMap<Integer,Integer> map = new HashMap<>();
+    public int numSquares(int n) {
+        if(map.containsKey(n)) return map.get(n);
+        if(n == 0) return 0;
+        int count = Integer.MAX_VALUE;
+        for(int i = 1; i * i <= n;i++){
+            count = Math.min(count,numSquares(n-i*i)+1);
+        }
+        map.put(n,count);
+        return count;
+    }
 
 
     /**给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
