@@ -1,8 +1,6 @@
 package DP_Greedy;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class DP {
 
@@ -61,7 +59,18 @@ public class DP {
 
      注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。*/
     public boolean wordBreak(String s, List<String> wordDict) {
-
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for(int i = 0; i < dp.length; i ++) {
+            for(String str : wordDict) {
+                int len = str.length();
+                if(i >= len && dp[i - len] == true && str.equals(s.substring(i - len, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
     }
 
     /**给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
