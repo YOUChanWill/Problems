@@ -62,4 +62,29 @@ public class DP {
     }
 
 
+
+    /**给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+
+     测试用例的答案是一个 32-位 整数。
+
+     子数组 是数组的连续子序列。*/
+    public int maxProduct(int[] nums) {
+
+    }
+
+
+
+    /**给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。**/
+    public boolean canPartition(int[] nums) {
+
+    }
+
+
+
+    /**给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。*/
+    public int longestValidParentheses(String s) {
+
+    }
+
+
 }
