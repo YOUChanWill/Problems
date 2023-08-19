@@ -105,16 +105,55 @@ public class DP {
     }
 
 
-
     /**给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
 
      测试用例的答案是一个 32-位 整数。
 
      子数组 是数组的连续子序列。*/
     public int maxProduct(int[] nums) {
-
+        int maxF = nums[0], minF = nums[0], ans = nums[0];
+        int length = nums.length;
+        for (int i = 1; i < length; ++i) {
+            int mx = maxF, mn = minF;
+            maxF = Math.max(mx * nums[i], Math.max(nums[i], mn * nums[i]));
+            minF = Math.min(mn * nums[i], Math.min(nums[i], mx * nums[i]));
+            ans = Math.max(maxF, ans);
+        }
+        return ans;
     }
 
+    public int maxProduct01(int[] nums) {
+        int n = nums.length;
+        if(n == 1){
+            return nums[0];
+        }
+
+        int max = nums[0];
+        int sum = 1;
+
+        for(int num : nums){
+            sum *= num;
+            if(max < sum){
+                max = sum;
+            }
+            if(num == 0){
+                sum = 1;
+            }
+        }
+
+        sum = 1;
+        for(int i = n-1; i >= 0; i--){
+            sum *= nums[i];
+            if(max < sum){
+                max = sum;
+            }
+            if(nums[i] == 0){
+                sum = 1;
+            }
+        }
+
+        return max;
+    }
 
 
     /**给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。**/
