@@ -1,5 +1,8 @@
 package DP_Greedy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Mul_DP {
 
     /**一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
@@ -52,8 +55,130 @@ public class Mul_DP {
 
      如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。*/
     public String longestPalindrome(String s) {
+        int len = s.length();
+        if (len < 2) {
+            return s;
+        }
 
+        int maxLen = 1;
+        int begin = 0;
+        // dp[i][j] 表示 s[i..j] 是否是回文串
+        boolean[][] dp = new boolean[len][len];
+        // 初始化：所有长度为 1 的子串都是回文串
+        for (int i = 0; i < len; i++) {
+            dp[i][i] = true;
+        }
+
+        char[] charArray = s.toCharArray();
+        // 递推开始
+        // 先枚举子串长度
+        for (int L = 2; L <= len; L++) {
+            // 枚举左边界，左边界的上限设置可以宽松一些
+            for (int i = 0; i < len; i++) {
+                // 由 L 和 i 可以确定右边界，即 j - i + 1 = L 得
+                int j = L + i - 1;
+                // 如果右边界越界，就可以退出当前循环
+                if (j >= len) {
+                    break;
+                }
+
+                if (charArray[i] != charArray[j]) {
+                    dp[i][j] = false;
+                } else {
+                    if (j - i < 3) {
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                }
+
+                // 只要 dp[i][L] == true 成立，就表示子串 s[i..L] 是回文，此时记录回文长度和起始位置
+                if (dp[i][j] && j - i + 1 > maxLen) {
+                    maxLen = j - i + 1;
+                    begin = i;
+                }
+            }
+        }
+        return s.substring(begin, begin + maxLen);
     }
+
+    int left;
+    int right;
+    public String longestPalindrome01(String s) {
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length - 1; i++) {
+            extend(chars, i, i);
+            extend(chars, i, i + 1);
+        }
+        return new String(chars, left, right - left + 1);
+    }
+
+    private void extend(char[] chars, int i, int j) {
+        int len = chars.length;
+        while (i >= 0 && j < len && chars[i] == chars[j]) {
+            i--;
+            j++;
+        }
+        i++;
+        j--;
+        if (right - left < j - i) {
+            left = i;
+            right = j;
+        }
+    }
+
+
+    // Manacher 算法
+    // 臂长，表示中心扩展算法向外扩展的长度。如果一个位置的最大回文字符串长度为 2 * length + 1 ，其臂长为 length。
+    public String longestPalindrome02(String s) {
+        int start = 0, end = -1;
+        StringBuffer t = new StringBuffer("#");
+        for (int i = 0; i < s.length(); ++i) {
+            t.append(s.charAt(i));
+            t.append('#');
+        }
+        t.append('#');
+        s = t.toString();
+
+        List<Integer> arm_len = new ArrayList<Integer>();
+        int right = -1, j = -1;
+        for (int i = 0; i < s.length(); ++i) {
+            int cur_arm_len;
+            if (right >= i) {
+                int i_sym = j * 2 - i;
+                int min_arm_len = Math.min(arm_len.get(i_sym), right - i);
+                cur_arm_len = expand(s, i - min_arm_len, i + min_arm_len);
+            } else {
+                cur_arm_len = expand(s, i, i);
+            }
+            arm_len.add(cur_arm_len);
+            if (i + cur_arm_len > right) {
+                j = i;
+                right = i + cur_arm_len;
+            }
+            if (cur_arm_len * 2 + 1 > end - start) {
+                start = i - cur_arm_len;
+                end = i + cur_arm_len;
+            }
+        }
+
+        StringBuffer ans = new StringBuffer();
+        for (int i = start; i <= end; ++i) {
+            if (s.charAt(i) != '#') {
+                ans.append(s.charAt(i));
+            }
+        }
+        return ans.toString();
+    }
+
+    public int expand(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            --left;
+            ++right;
+        }
+        return (right - left - 2) / 2;
+    }
+
 
 
     /**给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
