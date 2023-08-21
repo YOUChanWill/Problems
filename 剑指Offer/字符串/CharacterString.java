@@ -1,5 +1,9 @@
 package 字符串;
 
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CharacterString {
 
     /**剑指 Offer 05. 替换空格
@@ -70,7 +74,107 @@ public class CharacterString {
      部分非数值列举如下：
      ["12e", "1a3.14", "1.2.3", "+-5", "12e+5.4"]**/
     public boolean isNumber(String s) {
+        String trim;
+        if (s == null || (trim = s.trim()) == null){
+            return false;
+        }
+        String regex ="^([+-]?\\d+\\.?\\d*|[+-]?\\.\\d+)([Ee][+-]?\\d+)?$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(trim);
+        return m.matches();
+    }
 
+    public boolean isNumber01(String s) {
+        if(s == null || s.length() == 0){
+            return false;
+        }
+        //标记是否遇到相应情况
+        boolean numSeen = false;
+        boolean dotSeen = false;
+        boolean eSeen = false;
+        char[] str = s.trim().toCharArray();
+
+        for(int i = 0;i < str.length; i++){
+            if(str[i] >= '0' && str[i] <= '9'){
+                numSeen = true;
+            }else if(str[i] == '.'){
+                //.之前不能出现.或者e
+                if(dotSeen || eSeen){
+                    return false;
+                }
+                dotSeen = true;
+            }else if(str[i] == 'e' || str[i] == 'E'){
+                //e之前不能出现e，必须出现数
+                if(eSeen || !numSeen){
+                    return false;
+                }
+                eSeen = true;
+                numSeen = false;//重置numSeen，排除123e或者123e+的情况,确保e之后也出现数
+            }else if(str[i] == '-' || str[i] == '+'){
+                //+-出现在0位置或者e/E的后面第一个位置才是合法的
+                if(i != 0 && str[i-1] != 'e' && str[i-1] != 'E'){
+                    return false;
+                }
+            }else{//其他不合法字符
+                return false;
+            }
+        }
+        return numSeen;
+    }
+
+
+    // 使用有限状态自动机
+    static final int[][] status = {
+            {0, 1, 2, 9, 3, 9}, // 初始
+            {9, 9, 2, 9, 3, 9}, // 符号
+            {8, 9, 2, 5, 4, 9}, // 整数
+            {9, 9, 4, 9, 9, 9}, // 小数点
+            {8, 9, 4, 5, 9, 9}, // 小数
+            {9, 6, 7, 9, 9, 9}, // 科学计数
+            {9, 9, 7, 9, 9, 9}, // 幂符号
+            {8, 9, 7, 9, 9, 9}, // 幂次
+            {8, 9, 9, 9, 9, 9}, // 结束
+            {9, 9, 9, 9, 9, 9}, // 错误
+    };
+
+    static final boolean[] allow = {
+            false,  // 初始
+            false,  // 符号
+            true,   // 整数
+            false,  // 小数点
+            true,   // 小数
+            false,  // 科学计数
+            false,  // 幂符号
+            true,   // 幂次
+            true,   // 结束
+            false   // 错误
+    };
+
+    public boolean isNumber(String s) {
+        char[] chars = s.toCharArray();
+        int i = 0;
+        for (char c : chars) {
+            i = getNextStatus(i, c);
+        }
+        return allow[i];
+    }
+
+    private int getNextStatus(int i, char c) {
+        int j;
+        if (c == ' ') {
+            j = 0;
+        } else if (c == '+' || c == '-') {
+            j = 1;
+        } else if ('0' <= c && c <= '9') {
+            j = 2;
+        } else if (c == 'E' || c == 'e') {
+            j = 3;
+        } else if (c == '.') {
+            j = 4;
+        } else {
+            j = 5;
+        }
+        return status[i][j];
     }
 
 
