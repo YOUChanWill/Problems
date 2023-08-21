@@ -1,3 +1,5 @@
+package 链表;
+
 public class LinkedList {
     class ListNode {
         int val;
