@@ -186,6 +186,34 @@ public class CharacterString {
      假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。
      如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。**/
     public int strToInt(String str) {
-
+        //去前后空格
+        char[] chars = str.trim().toCharArray();
+        if (chars.length == 0) return 0;
+        //记录第一个符合是否为负数
+        int sign = 1;
+        //开始遍历的位置
+        int i = 1;
+        //如果首个非空格字符为负号，那么从位置1开始遍历字符串，并且结果需要变成负数
+        if (chars[0] == '-') {
+            sign = -1;
+        } else if (chars[0] != '+') { //如果首个非空格字符不是负号也不是加号，那么从第一个元素开始遍历
+            i = 0;
+        }
+        int number = Integer.MAX_VALUE / 10;
+        //结果
+        int res = 0;
+        for (int j = i; j < chars.length; j++) {
+            //遇到非数字直接退出
+            if (chars[j] > '9' || chars[j] < '0') break;
+            // 判断越界
+            if (res > number || (res == number && chars[j] > '7')) {
+                //根据字符串首负号判断返回最大值还是最小值
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+            //字符获取数字需要 - '0' 的位移
+            res = res * 10 + (chars[j] - '0');
+        }
+        //返回结果，需要判断正负
+        return res * sign;
     }
 }
