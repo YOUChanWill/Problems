@@ -85,41 +85,29 @@ public class CharacterString {
     }
 
     public boolean isNumber01(String s) {
-        if(s == null || s.length() == 0){
-            return false;
-        }
-        //标记是否遇到相应情况
-        boolean numSeen = false;
-        boolean dotSeen = false;
-        boolean eSeen = false;
+        if(s == null || s.length() == 0) return false;
+        // 标记各个状态
+        boolean number = false, dot = false, e = false;
         char[] str = s.trim().toCharArray();
-
+        // 开始遍历
         for(int i = 0;i < str.length; i++){
             if(str[i] >= '0' && str[i] <= '9'){
-                numSeen = true;
+                number = true;
             }else if(str[i] == '.'){
                 //.之前不能出现.或者e
-                if(dotSeen || eSeen){
-                    return false;
-                }
-                dotSeen = true;
+                if(dot || e) return false;
+                dot = true;
             }else if(str[i] == 'e' || str[i] == 'E'){
-                //e之前不能出现e，必须出现数
-                if(eSeen || !numSeen){
-                    return false;
-                }
-                eSeen = true;
-                numSeen = false;//重置numSeen，排除123e或者123e+的情况,确保e之后也出现数
+                // e之前必须出现数
+                if(e || !number) return false;
+                e = true;
+                number = false;// 重置number=
             }else if(str[i] == '-' || str[i] == '+'){
-                //+-出现在0位置或者e/E的后面第一个位置才是合法的
-                if(i != 0 && str[i-1] != 'e' && str[i-1] != 'E'){
-                    return false;
-                }
-            }else{//其他不合法字符
-                return false;
-            }
+                if(i != 0 && str[i-1] != 'e' && str[i-1] != 'E') return false;
+                // 其他不合法字符
+            }else return false;
         }
-        return numSeen;
+        return number;
     }
 
 
@@ -150,7 +138,7 @@ public class CharacterString {
             false   // 错误
     };
 
-    public boolean isNumber(String s) {
+    public boolean isNumber02(String s) {
         char[] chars = s.toCharArray();
         int i = 0;
         for (char c : chars) {
