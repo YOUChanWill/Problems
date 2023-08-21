@@ -37,7 +37,13 @@ public class CharacterString {
         return s.substring(n,s.length()) + s.substring(0,n);
     }
 
-
+    public String reverseLeftWords02(String s, int n) {
+        StringBuilder ans = new StringBuilder();
+        for(int i = n; i < n + s.length(); i++){
+            ans.append(s.charAt(i % s.length()));
+        }
+        return ans.toString();
+    }
 
 
     /**剑指 Offer 20. 表示数值的字符串
