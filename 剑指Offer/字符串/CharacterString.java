@@ -6,11 +6,17 @@ public class CharacterString {
 
      请实现一个函数，把字符串 s 中的每个空格替换成"%20"。**/
     public String replaceSpace(String s) {
-        return s.replaceAll(" ","%20");
+//        return s.replaceAll(" ","%20");
+        StringBuilder ans = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' '){
+                ans.append("%20");
+                continue;
+            }
+            ans.append(s.charAt(i));
+        }
+        return ans.toString();
     }
-
-
-
 
     /**剑指 Offer 58 - II. 左旋转字符串
 
