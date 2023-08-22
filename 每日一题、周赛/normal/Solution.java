@@ -276,6 +276,62 @@ public class Solution {
 
 
 
+    /**给你一个数组 seats 表示一排座位，其中 seats[i] = 1 代表有人坐在第 i 个座位上，
+     * seats[i] = 0 代表座位 i 上是空的（下标从 0 开始）。
+
+     至少有一个空座位，且至少有一人已经坐在座位上。
+
+     亚历克斯希望坐在一个能够使他与离他最近的人之间的距离达到最大化的座位上。
+
+     返回他到离他最近的人的最大距离。*/
+    public int maxDistToClosest(int[] seats) {
+        int count1 = 0;
+        int count2 = 0;
+        int i = 0, j = seats.length-1;
+        // count1记录开头连续0的个数
+        while(seats[i] == 0){
+            count1++;
+            i++;
+        }
+        // count2记录结尾连续0的个数
+        while(seats[j] == 0){
+            count2++;
+            j--;
+        }
+        // countmax记录从第一个1到最后一个1之间，连续0的最大值
+        int countmid = 0, countmax = 0;
+        for(int k = i+1; k <= j; k++){
+            if(seats[k] == 0){
+                countmid++;
+            }else{
+                countmax = Math.max(countmax, countmid);
+                countmid = 0;
+            }
+        }
+        // 返回count1, count2, (countmax+1)/2三者中最大值
+        return Math.max(Math.max(count1, count2), (countmax+1)/2);
+    }
+
+    public int maxDistToClosest01(int[] seats) {
+        int first = -1, last = -1;
+        int d = 0, n = seats.length;
+        for (int i = 0; i < n; ++i) {
+            if (seats[i] == 1) {
+                if (last != -1) {
+                    d = Math.max(d, i - last);
+                }
+                if (first == -1) {
+                    first = i;
+                }
+                last = i;
+            }
+        }
+        return Math.max(d / 2, Math.max(first, n - last - 1));
+    }
+
+
+
+
 
 
 
