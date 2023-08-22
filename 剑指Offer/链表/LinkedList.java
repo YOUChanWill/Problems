@@ -152,7 +152,7 @@ public class LinkedList {
             pre = pre.next;
             cur = cur.next;
         }
-        pre.next = null; // 单独处理原链表尾节点
+        pre.next = null; // 单独处理原链表尾节点,还原原链表
         return res;      // 返回新链表头节点
     }
 
