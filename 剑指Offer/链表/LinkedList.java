@@ -75,7 +75,6 @@ public class LinkedList {
         return preNode;
     }
 
-
     // 使用递归
     public ListNode reverseList01(ListNode head) {
         return recur(head, null);    // 调用递归并返回
@@ -89,25 +88,20 @@ public class LinkedList {
 
 
     public ListNode reverseList02(ListNode head) {
+        ListNode curNode = head;
         Stack<ListNode> stack = new Stack<>();
-        //把链表节点全部摘掉放到栈中
-        while (head != null) {
-            stack.push(head);
-            head = head.next;
+        while (curNode != null){
+            stack.push(curNode);
+            curNode = curNode.next;
         }
-        if (stack.isEmpty())
-            return null;
-        ListNode node = stack.pop();
-        ListNode dummy = node;
-        //栈中的结点全部出栈，然后重新连成一个新的链表
-        while (!stack.isEmpty()) {
-            ListNode tempNode = stack.pop();
-            node.next = tempNode;
-            node = node.next;
+        if (stack.isEmpty()) return null;
+        ListNode ansNode = stack.pop();
+        ListNode dummy = ansNode;
+        while (!stack.isEmpty()){
+            ansNode.next = stack.pop();
+            ansNode = ansNode.next;
         }
-        //最后一个结点就是反转前的头结点，一定要让他的next
-        //等于空，否则会构成环
-        node.next = null;
+        ansNode.next = null;
         return dummy;
     }
 
