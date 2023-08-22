@@ -1,0 +1,80 @@
+package 双指针;
+
+public class DoublePoint {
+
+    class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) {
+            val = x;
+            next = null;
+        }
+    }
+
+
+    /**剑指 Offer 18. 删除链表的节点
+
+     给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+
+     返回删除后的链表的头节点。*/
+    public ListNode deleteNode(ListNode head, int val) {
+
+    }
+
+
+
+    /**剑指 Offer 22. 链表中倒数第k个节点
+
+     输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
+
+     例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3 个节点是值为 4 的节点。*/
+    public ListNode getKthFromEnd(ListNode head, int k) {
+
+    }
+
+
+
+    /**剑指 Offer 25. 合并两个排序的链表
+
+     输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。*/
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+
+    }
+
+
+    /**剑指 Offer 52. 两个链表的第一个公共节点
+
+     输入两个链表，找出它们的第一个公共节点。*/
+    ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+
+    }
+
+
+    /**剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+
+     输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。*/
+    public int[] exchange(int[] nums) {
+
+    }
+
+
+    /**剑指 Offer 57. 和为s的两个数字
+
+     输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。*/
+    public int[] twoSum(int[] nums, int target) {
+
+    }
+
+
+
+    /**剑指 Offer 58 - I. 翻转单词顺序
+
+     输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。
+     为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。*/
+    public String reverseWords(String s) {
+
+    }
+
+
+
+}
