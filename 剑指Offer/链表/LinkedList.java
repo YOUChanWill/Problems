@@ -28,23 +28,20 @@ public class LinkedList {
 
      输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。**/
     public int[] reversePrint(ListNode head) {
-        //先获取链表长度，创建对应长度数组
         ListNode currNode = head;
-        int len = 0;
+        int count = 0;
         while(currNode != null){
-            len ++;
+            count++;
             currNode = currNode.next;
         }
-        int[] result = new int[len];
-
-        //再次遍历链表，将值倒序填充至结果数组
+        int[] ans = new int[count];
         currNode = head;
         while(currNode != null){
-            result[len - 1] = currNode.val;
-            len --;
+            ans[count - 1] = currNode.val;
+            count--;
             currNode = currNode.next;
         }
-        return result;
+        return ans;
     }
 
     public int[] reversePrint01(ListNode head) {
@@ -67,7 +64,17 @@ public class LinkedList {
 
      定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。**/
     public ListNode reverseList(ListNode head) {
-
+        ListNode curNode = head;
+        Stack<ListNode> stack = new Stack<>();
+        while (curNode != null) {
+            stack.push(curNode);
+            curNode = curNode.next;
+        }
+        ListNode ansNode = stack.pop();
+        while (!stack.isEmpty()){
+            ansNode.next = stack.pop();
+        }
+        return ansNode;
     }
 
 
