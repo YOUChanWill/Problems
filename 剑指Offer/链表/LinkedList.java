@@ -64,18 +64,29 @@ public class LinkedList {
 
      定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。**/
     public ListNode reverseList(ListNode head) {
-        ListNode curNode = head;
-        Stack<ListNode> stack = new Stack<>();
-        while (curNode != null) {
-            stack.push(curNode);
-            curNode = curNode.next;
+        ListNode curNode = head; // 头节点
+        ListNode preNode = null; // 尾
+        while (curNode != null){
+            ListNode tempNode = curNode.next; // 暂存头节点的下一个节点
+            curNode.next = preNode; // 头节点指向尾
+            preNode = curNode; // 尾部为原先的头节点
+            curNode = tempNode; // 新的头节点
         }
-        ListNode ansNode = stack.pop();
-        while (!stack.isEmpty()){
-            ansNode.next = stack.pop();
-        }
-        return ansNode;
+        return preNode;
     }
+
+
+    // 使用递归
+    public ListNode reverseList01(ListNode head) {
+        return recur(head, null);    // 调用递归并返回
+    }
+    private ListNode recur(ListNode cur, ListNode pre) {
+        if (cur == null) return pre; // 终止条件
+        ListNode res = recur(cur.next, cur);  // 递归后继节点
+        cur.next = pre;              // 修改节点引用指向
+        return res;                  // 返回反转链表的头节点
+    }
+
 
 
 
