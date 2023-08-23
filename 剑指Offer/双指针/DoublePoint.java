@@ -1,6 +1,9 @@
 package 双指针;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class DoublePoint {
 
@@ -108,11 +111,30 @@ public class DoublePoint {
         return stringBuilder.toString();
     }
 
+    public String reverseWords01(String s) {
+        // 除去开头和末尾的空白字符
+        s = s.trim();
+        // 正则匹配连续的空白字符作为分隔符分割
+        List<String> wordList = Arrays.asList(s.split("\\s+"));
+        Collections.reverse(wordList);
+        return String.join(" ", wordList);
+    }
 
-    public String reverseWords(String s) {
+    public String reverseWords02(String s) {
+        s = s.trim();
+        int start = s.length() - 1, end = s.length() - 1;
         StringBuilder stringBuilder = new StringBuilder();
-        s.trim();
-
+        while(start >= 0) {
+            while(start >= 0 && s.charAt(start) != ' '){
+                start--;
+            }
+            stringBuilder.append(s.substring(start + 1, end + 1)).append(" ");
+            while(start >= 0 && s.charAt(start) == ' ') {
+                start--;
+            }
+            end = start;
+        }
+        return stringBuilder.toString().trim();
     }
 
 
