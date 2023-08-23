@@ -100,6 +100,18 @@ public class DoublePoint {
      为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。*/
     public String reverseWords(String s) {
         StringBuilder stringBuilder = new StringBuilder();
+        String[] str = s.trim().split("\\s+");
+        for (int i = str.length - 1; i > 0; i--) {
+            stringBuilder.append(str[i]).append(" ");
+        }
+        stringBuilder.append(str[0]);
+        return stringBuilder.toString();
+    }
+
+
+    public String reverseWords(String s) {
+        StringBuilder stringBuilder = new StringBuilder();
+        s.trim();
 
     }
 
