@@ -1,5 +1,7 @@
 package 双指针;
 
+import java.util.HashMap;
+
 public class DoublePoint {
 
     class ListNode {
@@ -62,7 +64,32 @@ public class DoublePoint {
 
      输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。*/
     public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] ints = new int[2];
+        for (int x :
+                nums) {
+            map.put(x, target - x);
+            if (map.containsKey(target - x)) {
+                ints[0] = target - x;
+                ints[1] = map.get(target - x);
+            }
+        }
+        return ints;
+    }
 
+
+    public int[] twoSum01(int[] nums, int target) {
+        int strat = 0, end = nums.length - 1;
+        while (strat < end){
+            int sum = nums[strat] + nums[end];
+            if (sum > target){
+                end--;
+            }else if (sum < target) {
+                strat++;
+            }else return new int[]{nums[strat],nums[end]};
+
+        }
+        return new int[0];
     }
 
 
@@ -72,6 +99,7 @@ public class DoublePoint {
      输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。
      为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。*/
     public String reverseWords(String s) {
+        StringBuilder stringBuilder = new StringBuilder();
 
     }
 
