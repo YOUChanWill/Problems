@@ -111,6 +111,19 @@ public class DoublePoint {
         return stringBuilder.toString();
     }
 
+    public String reverseWordss(String s) {
+        s = s.trim();
+        String[] arr = s.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = arr.length - 1; i > -1; i--) {
+            sb.append(arr[i]);
+            if (!"".equals(arr[i]) && i > 0) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
     public String reverseWords01(String s) {
         // 除去开头和末尾的空白字符
         s = s.trim();
