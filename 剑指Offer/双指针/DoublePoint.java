@@ -23,7 +23,28 @@ public class DoublePoint {
 
      返回删除后的链表的头节点。*/
     public ListNode deleteNode(ListNode head, int val) {
+        ListNode pre = head, cur = head.next;
+        if (pre.val == val){
+            return cur;
+        }
+        while (cur != null){
+            if (cur.val == val){
+                pre.next = cur.next;
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+        return head;
+    }
 
+    public ListNode deleteNode01(ListNode head, int val) {
+        ListNode cur = head;
+        if (head.val == val) return head.next;
+        while (cur.next != null && cur.next.val != val) cur = cur.next;
+        if (cur.next != null){
+            cur.next = cur.next.next;
+        }
+        return head;
     }
 
 
