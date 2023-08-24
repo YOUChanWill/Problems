@@ -120,7 +120,47 @@ public class DoublePoint {
 
      输入两个链表，找出它们的第一个公共节点。*/
     ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode A = headA, B = headB;
+        while (A != B) {
+            A = A != null ? A.next : headB;
+            B = B != null ? B.next : headA;
+        }
+        return A;
+    }
 
+    ListNode getIntersectionNode01(ListNode headA, ListNode headB) {
+        ListNode pA = headA;
+        ListNode pB = headB;
+        int lA = 0;
+        int lB = 0;
+        while (pA != null) {
+            lA++;
+            pA = pA.next;
+        }
+        while (pB != null) {
+            lB++;
+            pB = pB.next;
+        }
+
+        pA = headA;
+        pB = headB;
+        if (lA > lB) {
+            for (int i = 0; i < (lA-lB); i++) {
+                pA = pA.next;
+            }
+        }
+        if (lB > lA) {
+            for (int i = 0; i < (lB-lA); i++) {
+                pB = pB.next;
+            }
+        }
+
+        while (pA != pB) {
+            pA = pA.next;
+            pB = pB.next;
+        }
+
+        return pA;
     }
 
 
