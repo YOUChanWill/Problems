@@ -55,7 +55,17 @@ public class DoublePoint {
 
      例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3 个节点是值为 4 的节点。*/
     public ListNode getKthFromEnd(ListNode head, int k) {
-
+        int count = 0;
+        ListNode cur = head;
+        while (cur.next != null){
+            count++;
+            cur = cur.next;
+        }
+        cur = head;
+        for (int i = 0; i <= count - k; i++) {
+            cur = cur.next;
+        }
+        return cur;
     }
 
 
