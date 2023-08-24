@@ -68,6 +68,17 @@ public class DoublePoint {
         return cur;
     }
 
+    public ListNode getKthFromEnd01(ListNode head, int k) {
+        ListNode start = head, end = head;
+        int count = 0;
+        while (end != null){
+            if (count >= k) start = start.next;
+            end = end.next;
+            count++;
+        }
+        return end;
+    }
+
 
 
     /**剑指 Offer 25. 合并两个排序的链表
