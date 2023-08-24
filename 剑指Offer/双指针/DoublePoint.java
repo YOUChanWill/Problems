@@ -168,7 +168,30 @@ public class DoublePoint {
 
      输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。*/
     public int[] exchange(int[] nums) {
+        int start = 0, end = nums.length - 1, temp;
+        while (start < end){
+            while (start < end && ((nums[start] % 2) == 1)) start++;
+            while (start < end && ((nums[end] % 2) == 0)) end--;
+            temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+        }
+        return nums;
+    }
 
+
+    public int[] exchange01(int[] nums) {
+        int slow = 0, fast = 0, temp;
+        while (fast < nums.length){
+            if (nums[fast] % 2 == 1){
+                temp = nums[slow];
+                nums[slow] = nums[fast];
+                nums[fast] = temp;
+                slow++;
+            }
+            fast++;
+        }
+        return nums;
     }
 
 
