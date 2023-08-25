@@ -1,5 +1,7 @@
 package 栈_队列;
 
+import org.omg.CORBA.OMGVMCID;
+
 import java.util.Stack;
 
 public class Stack_Queue {
@@ -71,7 +73,28 @@ public class Stack_Queue {
 
      给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。*/
     public int[] maxSlidingWindow(int[] nums, int k) {
+        int[] ans = new int[nums.length - k + 1];
+        for (int i = 0; i <= nums.length - k; i++) {
+            int max = Integer.MIN_VALUE;
+            for (int j = i; j < k+i; j++) {
+                if (nums[j] > max) max = nums[j];
+            }
+            ans[i] = max;
+        }
+        return ans;
+    }
 
+
+    public int[] maxSlidingWindow01(int[] nums, int k) {
+        int[] ans = new int[nums.length - k + 1];
+        for (int i = 0; i <= nums.length - k; i++) {
+            int max = Integer.MIN_VALUE;
+            for (int j = i; j < k+i; j++) {
+                if (nums[j] > max) max = nums[j];
+            }
+            ans[i] = max;
+        }
+        return ans;
     }
 
 
