@@ -2,6 +2,9 @@ package 栈_队列;
 
 import org.omg.CORBA.OMGVMCID;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public class Stack_Queue {
@@ -84,19 +87,22 @@ public class Stack_Queue {
         return ans;
     }
 
-
     public int[] maxSlidingWindow01(int[] nums, int k) {
         int[] ans = new int[nums.length - k + 1];
-        for (int i = 0; i <= nums.length - k; i++) {
-            int max = Integer.MIN_VALUE;
-            for (int j = i; j < k+i; j++) {
-                if (nums[j] > max) max = nums[j];
-            }
-            ans[i] = max;
+        Deque<Integer> deque = new LinkedList<>(); // 创建队列
+        for (int i = 0; i < k; i++) {
+            while (!deque.isEmpty() && deque.peekLast() < nums[i]) deque.removeLast();
+            deque.addLast(nums[i]);
+        }
+        ans[0] = deque.peekFirst();
+        for (int i = k; i < nums.length; i++) {
+            if (deque.peekFirst() == nums[i - k]) deque.removeFirst();
+            while (!deque.isEmpty() && deque.peekLast() < nums[i]) deque.removeLast();
+            deque.addLast(nums[i]);
+            ans[i - k + 1] = deque.peekFirst();
         }
         return ans;
     }
-
 
 
     /**剑指 Offer 59 - II. 队列的最大值
