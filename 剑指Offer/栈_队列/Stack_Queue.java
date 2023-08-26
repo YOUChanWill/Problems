@@ -112,20 +112,28 @@ public class Stack_Queue {
      若队列为空，pop_front 和 max_value 需要返回 -1*/
     class MaxQueue {
 
+        Deque<Integer> deque1;
+        Deque<Integer> deque2;
         public MaxQueue() {
-
+            deque1 = new LinkedList<Integer>();
+            deque2 = new LinkedList<Integer>();
         }
 
         public int max_value() {
-
+            if (deque1.isEmpty() || deque2.isEmpty()) return -1;
+            return deque2.peekFirst();
         }
 
         public void push_back(int value) {
-
+            deque1.addLast(value);
+            while (!deque2.isEmpty() && deque2.peekLast() < value) deque2.removeLast();
+            deque2.addLast(value);
         }
 
         public int pop_front() {
-
+            if (deque1.isEmpty() || deque2.isEmpty()) return -1;
+            if (deque1.peekFirst().equals(deque2.peekFirst())) deque2.removeFirst();
+            return deque1.removeFirst();
         }
     }
 
