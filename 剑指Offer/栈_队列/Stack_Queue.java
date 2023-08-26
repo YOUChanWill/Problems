@@ -111,7 +111,6 @@ public class Stack_Queue {
 
      若队列为空，pop_front 和 max_value 需要返回 -1*/
     class MaxQueue {
-
         Deque<Integer> deque1;
         Deque<Integer> deque2;
         public MaxQueue() {
