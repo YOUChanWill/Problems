@@ -92,7 +92,22 @@ public class Search {
 
      注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。*/
     public int minArray(int[] numbers) {
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] < min) min = numbers[i];
+        }
+        return min;
+    }
 
+    public int minArray01(int[] numbers) {
+        int left = 0, right = numbers.length - 1;
+        while (left < right){
+            int mid = left + (right - left) / 2; // 防止相加越界
+            if (numbers[mid] > numbers[right]) left = mid + 1;
+            else if (numbers[mid] < numbers[right]) right = mid;
+            else right--;
+        }
+        return numbers[left];
     }
 
 
