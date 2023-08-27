@@ -8,7 +8,18 @@ public class Search {
      在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
      数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字*/
     public int findRepeatNumber(int[] nums) {
-
+        int i = 0;
+        while (i < nums.length){
+            if (nums[i] == i){
+                i++;
+                continue;
+            }
+            if (nums[nums[i]] == nums[i]) return nums[i];
+            int temp = nums[i];
+            nums[i] = nums[temp];
+            nums[temp] = temp;
+        }
+        return -1;
     }
 
 
@@ -16,8 +27,19 @@ public class Search {
 
      统计一个数字在排序数组中出现的次数。*/
     public int search(int[] nums, int target) {
+        int count = 0;
+        for (int x :
+                nums) {
+            if (x == target) count++;
+        }
+        return count;
+    }
+
+    public int search01(int[] nums, int target) {
 
     }
+
+
 
 
     /**剑指 Offer 53 - II. 0～n-1中缺失的数字
