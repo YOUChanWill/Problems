@@ -1,5 +1,8 @@
 package 查找算法;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 public class Search {
 
 
@@ -97,7 +100,47 @@ public class Search {
 
      在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。*/
     public char firstUniqChar(String s) {
-
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (char x :
+                s.toCharArray()) {
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+        for (char x :
+                s.toCharArray()) {
+            if (map.get(x) == 1)return x;
+        }
+        return ' ';
     }
+
+    public char firstUniqChar01(String s) {
+        int[] cnt = new int[26];
+        char[] arr = s.toCharArray();
+
+        for(int i = 0;i < arr.length; i++) {
+            cnt[arr[i] - 'a'] ++;
+        }
+        for(int i = 0;i < arr.length; i++) {
+            if(cnt[arr[i] - 'a'] == 1) return arr[i];
+        }
+        return ' ';
+    }
+
+    public char firstUniqChar02(String s) {
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < 26; i++) {
+            int start = s.indexOf('a' + i);//找到字母的第一个位置
+            if (start != -1) {
+                int end = s.lastIndexOf('a' + i);
+                if (start == end) {
+                    res = Math.min(res, start);
+                }
+            }
+        }
+        return res == Integer.MAX_VALUE ? ' ' : s.charAt(res);
+    }
+
+
+
+
 
 }
