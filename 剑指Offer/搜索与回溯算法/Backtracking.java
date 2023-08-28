@@ -1,9 +1,6 @@
 package 搜索与回溯算法;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Backtracking {
 
@@ -82,7 +79,39 @@ public class Backtracking {
      请实现一个函数按照之字形顺序打印二叉树，
      即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。*/
     public List<List<Integer>> levelOrder3(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        if (root != null) deque.offerLast(root);
+        while (!deque.isEmpty()){
+            List<Integer> list = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                TreeNode node = deque.pollFirst();
+                list.add(node.val);
+                if (node.left != null) deque.offerLast(node.left);
+                if (node.right != null) deque.offerLast(node.right);
+            }
+            if (ans.size() % 2 == 1) Collections.reverse(list);
+            ans.add(list);
+        }
+        return ans;
+    }
 
+    public List<List<Integer>> levelOrder301(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        if (root != null) deque.offerLast(root);
+        while (!deque.isEmpty()){
+            LinkedList<Integer> list = new LinkedList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                TreeNode node = deque.pollFirst();
+                if (ans.size() % 2 == 0) list.addLast(node.val);
+                else list.addFirst(node.val);
+                if (node.left != null) deque.offerLast(node.left);
+                if (node.right != null) deque.offerLast(node.right);
+            }
+            ans.add(list);
+        }
+        return ans;
     }
 
 
