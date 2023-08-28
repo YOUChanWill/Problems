@@ -233,6 +233,69 @@ public class Backtracking {
     }
 
 
+    /**剑指 Offer 64. 求1+2+…+n
+
+     求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。*/
+    public int sumNums(int n) {
+
+    }
+
+
+    /**剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
+
+     给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+     百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，
+     满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”*/
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    }
+
+
+    /**剑指 Offer 68 - II. 二叉树的最近公共祖先
+
+     给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+     百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，
+     满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”*/
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    }
+
+
+    /**剑指 Offer 37. 序列化二叉树
+
+     请实现两个函数，分别用来序列化和反序列化二叉树。
+
+     你需要设计一个算法来实现二叉树的序列化与反序列化。
+     这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+
+     提示：输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。
+     你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。*/
+    class Codec {
+
+        // Encodes a tree to a single string.
+        public String serialize(TreeNode root) {
+
+        }
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(String data) {
+
+        }
+    }
+
+
+    /**剑指 Offer 38. 字符串的排列
+
+     输入一个字符串，打印出该字符串中字符的所有排列。
+
+     你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。*/
+    public String[] permutation(String s) {
+
+    }
+
+
 
 
 
