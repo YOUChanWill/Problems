@@ -28,14 +28,13 @@ public class Backtracking {
             if (node.left != null) deque.addLast(node.left);
             if (node.right != null) deque.addLast(node.right);
         }
-//        int[] ans = new int[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            ans[i] = list.get(i);
-//        }
-        int arr[] = list.stream().mapToInt(Integer::intValue).toArray();
-        return arr;
+        int[] ans = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ans[i] = list.get(i);
+        }
+//        int arr[] = list.stream().mapToInt(Integer::intValue).toArray();
+        return ans;
     }
-
 
 
     /**剑指 Offer 32 - II. 从上到下打印二叉树 II
