@@ -1,5 +1,8 @@
 package 搜索与回溯算法;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Backtracking {
@@ -15,7 +18,22 @@ public class Backtracking {
 
      从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。*/
     public int[] levelOrder1(TreeNode root) {
-
+        if (root == null) return new int[0];
+        Deque<TreeNode> deque = new LinkedList<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        deque.add(root);
+        while (!deque.isEmpty()){
+            TreeNode node = deque.pollFirst();
+            list.add(node.val);
+            if (node.left != null) deque.addLast(node.left);
+            if (node.right != null) deque.addLast(node.right);
+        }
+//        int[] ans = new int[list.size()];
+//        for (int i = 0; i < list.size(); i++) {
+//            ans[i] = list.get(i);
+//        }
+        int arr[] = list.stream().mapToInt(Integer::intValue).toArray();
+        return arr;
     }
 
 
