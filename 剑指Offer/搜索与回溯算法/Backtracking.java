@@ -8,7 +8,29 @@ public class Backtracking {
         int val;
         TreeNode left;
         TreeNode right;
-        TreeNode(int x) { val = x;}
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node() {}
+        public Node(int _val) {
+            val = _val;
+        }
+        public Node(int _val,Node _left,Node _right) {
+            val = _val;
+            left = _left;
+            right = _right;
+        }
     }
 
     /**剑指 Offer 32 - I. 从上到下打印二叉树
@@ -115,7 +137,6 @@ public class Backtracking {
     }
 
 
-
     /**剑指 Offer 26. 树的子结构
 
      输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
@@ -165,6 +186,56 @@ public class Backtracking {
     public int movingCount(int m, int n, int k) {
 
     }
+
+
+    /**剑指 Offer 34. 二叉树中和为某一值的路径
+
+     给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+
+     叶子节点 是指没有子节点的节点。*/
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+
+    }
+
+
+
+    /**剑指 Offer 36. 二叉搜索树与双向链表
+
+     输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。*/
+    public Node treeToDoublyList(Node root) {
+
+    }
+
+
+
+    /**剑指 Offer 54. 二叉搜索树的第k大节点
+
+     给定一棵二叉搜索树，请找出其中第 k 大的节点的值。*/
+    public int kthLargest(TreeNode root, int k) {
+
+    }
+
+
+    /**剑指 Offer 55 - I. 二叉树的深度
+
+     输入一棵二叉树的根节点，求该树的深度。从根节点到叶节点依次经过的节点（含根、叶节点）形成树的一条路径，最长路径的长度为树的深度。*/
+    public int maxDepth(TreeNode root) {
+
+    }
+
+
+
+    /**剑指 Offer 55 - II. 平衡二叉树
+
+     输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。*/
+    public boolean isBalanced(TreeNode root) {
+
+    }
+
+
+
+
+
 
 
 
