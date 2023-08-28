@@ -41,7 +41,39 @@ public class Backtracking {
 
      从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。*/
     public List<List<Integer>> levelOrder2(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        if (root != null) deque.addLast(root);
+        while (!deque.isEmpty()){
+            List<Integer> list = new ArrayList<>();
+            for (int i = deque.size(); i > 0; i--) {
+                TreeNode node = deque.pollFirst();
+                list.add(node.val);
+                if (node.left != null) deque.offerLast(node.left);
+                if (node.right != null) deque.offerLast(node.right);
+            }
+            ans.add(list);
+        }
+        return ans;
+    }
 
+    // 深度搜索，递归
+    List<List<Integer>> node = new ArrayList();
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        lei(root, 0);
+        return node;
+    }
+
+    public void lei(TreeNode root, int k){
+        if(root != null){
+            if(node.size()<=k) {
+                node.add(new ArrayList());
+            }
+            node.get(k).add(root.val);
+            lei(root.left, k+1);
+            lei(root.right,k+1);
+        }
     }
 
 
