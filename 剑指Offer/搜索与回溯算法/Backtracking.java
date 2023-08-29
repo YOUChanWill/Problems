@@ -214,10 +214,15 @@ public class Backtracking {
 
      请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。*/
     public boolean isSymmetric(TreeNode root) {
-
-
+        if (root == null) return true;
+        return isSame(root.left,root.right);
     }
 
+    public boolean isSame(TreeNode p, TreeNode q) {
+        if (q ==  null && p == null) return true;
+        if (p == null || q == null || p.val != q.val) return false;
+        return isSame(p.left, q.right) && isSame(p.right, q.left);
+    }
 
 
     /**剑指 Offer 12. 矩阵中的路径
