@@ -170,7 +170,43 @@ public class Backtracking {
 
      请完成一个函数，输入一个二叉树，该函数输出它的镜像。*/
     public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return null;
+        TreeNode temp = root.left;
+        root.left = mirrorTree(root.right);
+        root.right = mirrorTree(temp);
+        return root;
+    }
 
+
+    public TreeNode mirrorTree1(TreeNode root) {
+        if (root == null) return null;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            if (node.left != null) stack.push(node.left);
+            if (node.right != null) stack.push(node.right);
+            TreeNode node1 = node.left;
+            node.left = node.right;
+            node.right = node1;
+        }
+        return root;
+    }
+
+
+    public TreeNode mirrorTree2(TreeNode root) {
+        if (root == null) return null;
+        Deque<TreeNode> deque = new LinkedList<>();
+        deque.offerLast(root);
+        while (!deque.isEmpty()){
+            TreeNode node = deque.pollFirst();
+            if (node.left != null) deque.offerLast(node.left);
+            if (node.right != null) deque.offerLast(node.right);
+            TreeNode node1 = node.left;
+            node.left = node.right;
+            node.right = node1;
+        }
+        return root;
     }
 
 
