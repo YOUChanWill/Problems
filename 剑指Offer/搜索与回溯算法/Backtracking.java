@@ -259,8 +259,37 @@ public class Backtracking {
      它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。
      例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。
      请问该机器人能够到达多少个格子？*/
-    public int movingCount(int m, int n, int k) {
 
+    int m, n, k;
+    boolean[][] visited;
+    public int movingCount(int m, int n, int k) {
+        this.m = m; this.n = n; this.k = k;
+        visited = new boolean[m][n];
+        return movingCountDFS(0,0,0,0);
+    }
+
+    private int movingCountDFS(int i, int j, int sum1, int sum2){
+        if (i >= m || j >= n || sum1 + sum2 > k || visited[i][j]) return 0;
+        visited[i][j] = true; // 标记已经被访问过
+        return 1 + movingCountDFS(i + 1, j, (i + 1) % 10 != 0 ? sum1 + 1 : sum1 - 8, sum2) +
+                movingCountDFS(i,j + 1,sum1 , (j + 1) % 10 != 0 ? sum2 + 1 : sum2 - 8);
+    }
+
+    public int movingCountBFS(int m, int n, int k) {
+        boolean[][] visited = new boolean[m][n];
+        int count = 0;
+        Deque<int[]> deque = new LinkedList<>();
+        deque.offerLast(new int[]{0,0,0,0});
+        while (!deque.isEmpty()){
+            int[] x = deque.pollFirst();
+            int i = x[0], j = x[1], sum1 = x[2], sum2 = x[3];
+            if (i >= m || j >= n || sum1 + sum2 > k || visited[i][j]) continue;
+            visited[i][j] = true;
+            count++;
+            deque.offerLast(new int[]{i + 1, j, (i + 1) % 10 != 0 ? sum1 + 1 : sum1 - 8, sum2});
+            deque.offerLast(new int[]{i,j + 1,sum1 , (j + 1) % 10 != 0 ? sum2 + 1 : sum2 - 8});
+        }
+        return count;
     }
 
 
