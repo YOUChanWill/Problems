@@ -244,10 +244,11 @@ public class Backtracking {
     private boolean dfs(char[][] board, char[] word, int i, int j, int k){
         if (i >= board.length || i < 0 || j >= board[0].length || j < 0 || board[i][j] != word[k]) return false;
         if (k == (word.length - 1)) return true; // 递归结束
+        char temp = board[i][j];
         board[i][j] = '\0';
         boolean res = dfs(board,word,i + 1, j , k + 1) || dfs(board,word,i - 1 ,j ,k + 1) ||
                 dfs(board,word,i , j + 1 , k + 1) || dfs(board,word,i  ,j - 1,k + 1);
-        board[i][j] = word[k];
+        board[i][j] = temp; // 回溯的过程
         return res;
     }
 
