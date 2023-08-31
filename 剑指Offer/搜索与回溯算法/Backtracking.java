@@ -343,11 +343,24 @@ public class Backtracking {
     /**剑指 Offer 54. 二叉搜索树的第k大节点
 
      给定一棵二叉搜索树，请找出其中第 k 大的节点的值。*/
+    int count, res;
     public int kthLargest(TreeNode root, int k) {
+        this.count = k;
         if (root == null) return 0;
-
+        kthLargestDFS(root);
+        return res;
     }
 
+    private void kthLargestDFS(TreeNode cur){
+        if (cur == null) return;
+        kthLargestDFS(cur.right);
+        count -= 1;
+        if (count == 0) {
+            res = cur.val;
+            return;
+        }
+        kthLargestDFS(cur.left);
+    }
 
 
     /**剑指 Offer 55 - I. 二叉树的深度
