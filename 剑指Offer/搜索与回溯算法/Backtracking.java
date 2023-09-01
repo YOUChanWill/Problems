@@ -403,6 +403,20 @@ public class Backtracking {
     }
 
 
+    public boolean isBalanced1(TreeNode root) {
+        return depth(root) != -1;
+    }
+
+    public int depth(TreeNode root) {
+        if (root == null) return 0;
+        int left = depth(root.left);
+        if (left == -1) return -1;
+        int right = depth(root.right);
+        if (right == -1) return -1;
+        return Math.abs(left - right) < 2 ? Math.max(left,right) + 1 : -1;
+    }
+
+
     /**剑指 Offer 64. 求1+2+…+n
 
      求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。*/
