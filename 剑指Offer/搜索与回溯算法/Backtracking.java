@@ -494,7 +494,6 @@ public class Backtracking {
         else return root; //否则，当 left和 right均不为空时，说明 p、q节点分别在 root异侧, 最近公共祖先即为 root
     }
 
-
     /**剑指 Offer 37. 序列化二叉树
 
      请实现两个函数，分别用来序列化和反序列化二叉树。
