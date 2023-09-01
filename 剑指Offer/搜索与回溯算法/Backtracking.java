@@ -1,6 +1,9 @@
 package 搜索与回溯算法;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Backtracking {
 
@@ -421,7 +424,17 @@ public class Backtracking {
 
      求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。*/
     public int sumNums(int n) {
+        if (n == 1) return 1;
+        return n + sumNums( n - 1);
+    }
 
+    public int sumNums1(int n) {
+        boolean x = n > 1 && (n += sumNums1(n - 1)) > 0;
+        return n;
+    }
+
+    public int sumNums2(int n) {
+        return IntStream.range(1,n+1).sum();
     }
 
 
