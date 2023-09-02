@@ -2,6 +2,8 @@ package 排序;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Sort {
 
@@ -69,21 +71,26 @@ public class Sort {
      double findMedian() - 返回目前所有元素的中位数。*/
     class MedianFinder {
 
+        Queue<Integer> Max, Min;
         /** initialize your data structure here. */
         public MedianFinder() {
-
+            Max = new PriorityQueue<>(); // 小顶堆，用于维护较大的
+            Min = new PriorityQueue<>((x,y) -> (y - x)); // 大顶堆，用于维护较小的
         }
 
         public void addNum(int num) {
-
+            if (Max.size() != Min.size()){
+                Max.add(num);
+                Min.add(Max.poll());
+            }else {
+                Min.add(num);
+                Max.add(Min.poll());
+            }
         }
 
         public double findMedian() {
-
+            return Max.size() != Min.size() ? Max.peek() : (Max.peek() + Min.peek()) / 2.0;
         }
     }
-
-
-
 
 }
