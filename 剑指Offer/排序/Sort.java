@@ -1,6 +1,7 @@
 package 排序;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Sort {
 
@@ -18,9 +19,19 @@ public class Sort {
      从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子，即这5张牌是不是连续的。
      2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。*/
     public boolean isStraight(int[] nums) {
-
+        HashSet<Integer> set = new HashSet<>(); // 用于判断是否有重复的
+        int max = -1 ,min = 14;
+        for (int i = 0; i < nums.length; i++) {
+            if (!set.add(nums[i]) && nums[i] != 0) return false;
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+            if (nums[i] < min && nums[i] != 0) {
+                min = nums[i];
+            }
+        }
+        return max - min < 5;
     }
-
 
 
     /**剑指 Offer 40. 最小的k个数
@@ -34,7 +45,6 @@ public class Sort {
         }
         return ans;
     }
-
 
 
     /**剑指 Offer 41. 数据流中的中位数
