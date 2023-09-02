@@ -27,4 +27,30 @@ public class Solution {
 
     }
 
+
+
+    /**剑指 Offer 33. 二叉搜索树的后序遍历序列
+
+     输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。
+     如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。*/
+    public boolean verifyPostorder(int[] postorder) {
+
+    }
+
+
+    /**剑指 Offer 17. 打印从1到最大的n位数
+
+     输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。*/
+    public int[] printNumbers(int n) {
+
+    }
+
+
+    /**剑指 Offer 51. 数组中的逆序对
+
+     在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。*/
+    public int reversePairs(int[] nums) {
+
+    }
+
 }
