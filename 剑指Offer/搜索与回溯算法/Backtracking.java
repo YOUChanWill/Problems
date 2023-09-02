@@ -554,9 +554,33 @@ public class Backtracking {
      输入一个字符串，打印出该字符串中字符的所有排列。
 
      你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。*/
+    List<String> result = new LinkedList<>();
+    char[] c;
     public String[] permutation(String s) {
-
+        c = s.toCharArray();
+        permutationDFS(0);
+        return result.toArray(new String[result.size()]);
     }
 
+    private void permutationDFS(int x){
+        HashSet<Character> set = new HashSet<>();
+        if (x == c.length - 1){
+            result.add(String.valueOf(c));
+            return;
+        }
+        for (int i = x; i < c.length; i++) {
+           if (set.contains(c[i])) continue;
+           set.add(c[i]);
+           swap(i,x);
+           permutationDFS(x + 1);
+           swap(i,x);
+        }
+    }
+
+    void swap(int a, int b){
+        char temp = c[a];
+        c[a] = c[b];
+        c[b] = temp;
+    }
 
 }
