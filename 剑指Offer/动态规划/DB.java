@@ -42,7 +42,26 @@ public class DB {
 
      假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票一次可能获得的最大利润是多少？*/
     public int maxProfit(int[] prices) {
+        int max = Integer.MIN_VALUE , cur;
+        for (int i = 0; i < prices.length; i++) {
+            for (int j = i; j <prices.length; j++) {
+                if (prices[i] < prices[j]) {
+                    cur = prices[j] - prices[i];
+                    max = Math.max(max,cur);
+                }
+            }
+        }
+        return max;
+    }
 
+    public int maxProfit1(int[] prices) {
+        int cost = Integer.MAX_VALUE, profit = 0;
+        for (int x :
+                prices) {
+            cost = Math.min(x, cost);
+            profit = Math.max(profit,x - cost);
+        }
+        return profit;
     }
 
 
