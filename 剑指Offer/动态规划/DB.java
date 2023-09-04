@@ -99,15 +99,59 @@ public class DB {
      你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。
      给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？*/
     public int maxValue(int[][] grid) {
-
+        int m = grid.length, n = grid[0].length;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(i == 0 && j == 0) continue;
+                if(i == 0) grid[i][j] += grid[i][j - 1] ;
+                else if(j == 0) grid[i][j] += grid[i - 1][j];
+                else grid[i][j] += Math.max(grid[i][j - 1], grid[i - 1][j]);
+            }
+        }
+        return grid[m - 1][n - 1];
     }
+
+    public int maxValue1(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        for(int j = 1; j < n; j++) // 初始化第一行
+            grid[0][j] += grid[0][j - 1];
+        for(int i = 1; i < m; i++) // 初始化第一列
+            grid[i][0] += grid[i - 1][0];
+        for(int i = 1; i < m; i++)
+            for(int j = 1; j < n; j++)
+                grid[i][j] += Math.max(grid[i][j - 1], grid[i - 1][j]);
+        return grid[m - 1][n - 1];
+    }
+
 
     /**剑指 Offer 46. 把数字翻译成字符串
 
      给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。
      一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。*/
     public int translateNum(int num) {
+        String str = String.valueOf(num);
+        int a = 1, b = 1;
+        for (int i = 2; i <= str.length(); i++) {
+            String temp = str.substring(i - 2,i);
+            int c = temp.compareTo("10") >= 0 && temp.compareTo("25") <= 0 ? a + b : a;
+            b = a;
+            a = c;
+        }
+        return a;
+    }
 
+    public int translateNum1(int num) {
+        int a = 1, b = 1, x, y = num % 10;
+        while(num != 0) {
+            num /= 10;
+            x = num % 10;
+            int tmp = 10 * x + y;
+            int c = (tmp >= 10 && tmp <= 25) ? a + b : a;
+            b = a;
+            a = c;
+            y = x;
+        }
+        return a;
     }
 
 
