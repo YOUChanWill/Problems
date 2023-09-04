@@ -79,6 +79,19 @@ public class DB {
         return res;
     }
 
+    public int maxSubArray1(int[] nums) {
+        int max = nums[0];
+        int former = 0;//用于记录dp[i-1]的值，对于dp[0]而言，其前面的dp[-1]=0
+        int cur = nums[0];//用于记录dp[i]的值
+        for(int num:nums){
+            cur = num;
+            if(former>0) cur +=former;
+            if(cur>max) max = cur;
+            former=cur;
+        }
+        return max;
+    }
+
 
     /**剑指 Offer 47. 礼物的最大价值
 
