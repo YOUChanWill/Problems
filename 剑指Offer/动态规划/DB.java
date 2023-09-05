@@ -1,5 +1,6 @@
 package 动态规划;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -269,7 +270,24 @@ public class DB {
 
      你需要用一个浮点数数组返回答案，其中第 i 个元素代表这 n 个骰子所能掷出的点数集合中第 i 小的那个的概率。*/
     public double[] dicesProbability(int n) {
-
+        /* 初始化骰子数目为1时的情况，即dp[1],并填充1-6点数的各自概率为1/6 */
+        double[] dp=new double[6];
+        Arrays.fill(dp,1.0 / 6.0);
+        /* 每次骰子数为n时它的点数和种类为(6n-n)+1,这里从2个骰子开始计数dp */
+        for(int i=2;i<=n;i++){
+            double[] temp=new double[i*5+1];
+            /* 下面索引值和对应的点数是不对应的，但保证了temp长度和对应的点数和种类数目对应即可，比如当求n为2时，temp[0]代表点数和为2的概率，temp[10]代表点数和为12的概率 */
+            for(int j=0;j<dp.length;j++){
+                /* 每次由dp[n-1]推导dp[n],对应相加的点数(1-6)出现的概率都为1/6,故乘以1/6 */
+                for(int k=0;k<6;k++){
+                    temp[j+k]+=dp[j]*1.0/6.0;
+                }
+            }
+            /* dp[n]只能经过dp[n-1]推导而来，故每次都只保留dp[n-1]即可，即temp(点数和种类，即对应的概率集合) */
+            dp=temp;
+        }
+        /* 返回最终的dp[n]即可 */
+        return dp;
     }
 
 }
