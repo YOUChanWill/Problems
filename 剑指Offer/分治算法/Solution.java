@@ -1,5 +1,9 @@
 package 分治算法;
 
+import DataStructures.HasCycle;
+
+import java.util.HashMap;
+
 public class Solution {
 
     class TreeNode {
@@ -14,10 +18,24 @@ public class Solution {
      输入某二叉树的前序遍历和中序遍历的结果，请构建该二叉树并返回其根节点。
 
      假设输入的前序遍历和中序遍历的结果中都不含重复的数字。*/
+    int[] preorder;
+    HashMap<Integer,Integer> hashMap = new HashMap<>();
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-
+        this.preorder = preorder;
+        for (int i = 0; i < inorder.length; i++) {
+            hashMap.put(inorder[i],i);
+        }
+        return build(0,0, preorder.length - 1);
     }
 
+    private TreeNode build(int root, int left, int right){
+        if (left > right) return null;
+        TreeNode node = new TreeNode(preorder[root]);
+        int i = hashMap.get(preorder[root]);
+        node.left = build(root + 1, left, i - 1);
+        node.right = build(root + i - left + 1,i + 1 ,right);
+        return node;
+    }
 
 
     /**剑指 Offer 16. 数值的整数次方
