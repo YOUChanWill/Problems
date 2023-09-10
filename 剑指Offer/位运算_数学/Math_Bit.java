@@ -101,7 +101,13 @@ public class Math_Bit {
     }
 
     public int singleNumber1(int[] nums) {
-
+        int one = 0, two = 0;
+        for (int x :
+                nums) {
+            one = one ^ x & ~ two;
+            two = two ^ x &~ one;
+        }
+        return one;
     }
 
 
