@@ -1,5 +1,7 @@
 package 位运算_数学;
 
+import java.util.Arrays;
+
 public class Math_Bit {
 
 
@@ -14,9 +16,17 @@ public class Math_Bit {
      在 Java 中，编译器使用 二进制补码 记法来表示有符号整数。因此，在上面的 示例 3 中，输入表示有符号整数 -3。*/
     // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
-
+        return Integer.bitCount(n);
     }
 
+    public int hammingWeight1(int n) {
+        int ret = 0;
+        while (n != 0) {
+            n &= n - 1;
+            ret++;
+        }
+        return ret;
+    }
 
 
     /**剑指 Offer 65. 不用加减乘除做加法
