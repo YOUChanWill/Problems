@@ -122,7 +122,6 @@ public class Solution {
     }
 
 
-
     int[] res;
     int nine = 0, count = 0, start, n;
     char[] num, loop = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
@@ -225,7 +224,6 @@ public class Solution {
         }
         return count;
     }
-
 
     int[] temp;
     public int reversePairs2(int[] nums) {
