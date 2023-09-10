@@ -163,4 +163,97 @@ public class Solution {
         return count;
     }
 
+
+    public int reversePairs1(int[] nums) {
+        int len = nums.length;
+
+        if (len < 2) {
+            return 0;
+        }
+
+        int[] copy = new int[len];
+        for (int i = 0; i < len; i++) {
+            copy[i] = nums[i];
+        }
+
+        int[] temp = new int[len];
+        return reversePairs(copy, 0, len - 1, temp);
+    }
+
+    private int reversePairs(int[] nums, int left, int right, int[] temp) {
+        if (left == right) {
+            return 0;
+        }
+
+        int mid = left + (right - left) / 2;
+        int leftPairs = reversePairs(nums, left, mid, temp);
+        int rightPairs = reversePairs(nums, mid + 1, right, temp);
+
+        if (nums[mid] <= nums[mid + 1]) {
+            return leftPairs + rightPairs;
+        }
+
+        int crossPairs = mergeAndCount(nums, left, mid, right, temp);
+        return leftPairs + rightPairs + crossPairs;
+    }
+
+    private int mergeAndCount(int[] nums, int left, int mid, int right, int[] temp) {
+        for (int i = left; i <= right; i++) {
+            temp[i] = nums[i];
+        }
+
+        int i = left;
+        int j = mid + 1;
+
+        int count = 0;
+        for (int k = left; k <= right; k++) {
+
+            if (i == mid + 1) {
+                nums[k] = temp[j];
+                j++;
+            } else if (j == right + 1) {
+                nums[k] = temp[i];
+                i++;
+            } else if (temp[i] <= temp[j]) {
+                nums[k] = temp[i];
+                i++;
+            } else {
+                nums[k] = temp[j];
+                j++;
+                count += (mid - i + 1);
+            }
+        }
+        return count;
+    }
+
+
+    int[] temp;
+    public int reversePairs2(int[] nums) {
+        temp = new int[nums.length + 1];
+        return merge_sort(0, nums.length - 1, nums);
+    }
+
+    public int merge_sort(int l, int r, int[] nums) {
+        if (l >= r)
+            return 0;
+        int mid = l + r >> 1;
+        int res = merge_sort(l, mid, nums) + merge_sort(mid + 1, r, nums);
+
+        int k = 0, i = l, j = mid + 1;
+        while (i <= mid && j <= r) {
+            if (nums[i] <= nums[j])
+                temp[k++] = nums[i++];
+            else {
+                temp[k++] = nums[j++];
+                res += mid - i + 1;
+            }
+        }
+        while (i <= mid) temp[k++] = nums[i++];
+        while (j <= r) temp[k++] = nums[j++];
+
+        for (int a = l, b = 0; a <= r; a++, b++)
+            nums[a] = temp[b];
+        return res;
+    }
+
 }
