@@ -22,7 +22,7 @@ public class Math_Bit {
     public int hammingWeight1(int n) {
         int ret = 0;
         while (n != 0) {
-            n &= n - 1;
+            n &= n - 1; // 把 n 的二进制位中的最低位的 1 变为 0
             ret++;
         }
         return ret;
