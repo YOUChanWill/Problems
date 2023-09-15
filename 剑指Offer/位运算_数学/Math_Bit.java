@@ -224,8 +224,7 @@ public class Math_Bit {
 
      请写一个函数，求任意第n位对应的数字。*/
     public int findNthDigit(int n) {
-        int digit = 1, res = 0;
-        int high = n / 10, cur = n % 10, low = 0;
+        int digit = 1, res = 0, high = n / 10, cur = n % 10, low = 0;
         while(high != 0 || cur != 0) {
             if(cur == 0) res += high * digit;
             else if(cur == 1) res += high * digit + low + 1;
